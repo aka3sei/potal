@@ -3,7 +3,7 @@ import streamlit as st
 # 1. ページ設定
 st.set_page_config(page_title="不動産営業支援ポータル", layout="centered")
 
-# CSS: ボタンデザインと中央揃えのみ。入力欄のCSSはすべて削除しました。
+# CSS: コンテンツ配置と数字ボタンのデザインのみ。入力欄の装飾は一切なし。
 st.markdown("""
     <style>
     header[data-testid="stHeader"] { visibility: hidden; }
@@ -11,14 +11,14 @@ st.markdown("""
     /* 上部余白 1.0rem */
     .block-container { padding-top: 1.0rem !important; }
     
-    /* コンテンツ幅を280pxで中央固定 */
+    /* コンテンツ幅固定（ボタンと揃えるため） */
     [data-testid="stVerticalBlock"] > div {
         width: 280px !important;
         margin-left: auto !important;
         margin-right: auto !important;
     }
 
-    /* タイトルの余白 */
+    /* タイトル */
     .title-text {
         font-size: 22px;
         font-weight: bold;
@@ -27,7 +27,7 @@ st.markdown("""
         margin-bottom: 20px !important;
     }
 
-    /* 数字ボタンのデザイン（これまでの完璧な状態を維持） */
+    /* 数字ボタンのデザイン（維持） */
     div.stButton > button {
         width: 100% !important;
         height: 75px !important; 
@@ -43,14 +43,14 @@ st.markdown("""
         box-shadow: 0 4px 6px -1px rgba(0,0,0,0.08) !important;
     }
 
-    /* 押し込みアニメーション */
+    /* ボタン押し込み */
     div.stButton > button:active {
         transform: scale(0.92) !important;
         background-color: #1a365d !important;
         color: #ffffff !important;
     }
 
-    /* 削除ボタン */
+    /* 修正ボタン */
     div.stButton > button[kind="secondary"] {
         background-color: #f1f5f9 !important;
         height: 60px !important;
@@ -80,10 +80,10 @@ if not st.session_state['authenticated']:
             st.session_state['temp_password'] = ""
             st.rerun()
 
-    # 初期状態の入力枠（ラベルだけ隠して標準のまま表示）
+    # 装飾なしの標準入力枠
     st.text_input("pass", value=st.session_state['temp_password'], type="password", label_visibility="collapsed")
 
-    # 1〜5までのボタン
+    # 1〜5のボタン
     for num in ["1", "2", "3", "4", "5"]:
         if st.button(num, key=f"num_{num}"):
             st.session_state['temp_password'] += num
