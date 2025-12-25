@@ -9,7 +9,7 @@ st.markdown("""
     header[data-testid="stHeader"] { visibility: hidden; }
     
     /* 【修正】上部余白を 1.0rem に設定 */
-    .block-container { padding-top: 1.0rem !important; }
+    .block-container { padding-top: 1.2rem !important; }
     
     /* コンテンツ幅固定 */
     [data-testid="stVerticalBlock"] > div {
@@ -127,3 +127,4 @@ else:
     if st.button("ログアウト", key="logout_btn", type="secondary"):
         st.session_state['authenticated'] = False
         st.rerun()
+
