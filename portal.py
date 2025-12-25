@@ -3,7 +3,7 @@ import streamlit as st
 # 1. ページ設定
 st.set_page_config(page_title="不動産営業支援ポータル", layout="centered")
 
-# CSS: 中央揃えと幅広デザインを死守
+# CSS: 中央揃え・幅広デザイン・押し込みアニメーション
 st.markdown("""
     <style>
     header[data-testid="stHeader"] { visibility: hidden; }
@@ -27,10 +27,10 @@ st.markdown("""
         margin: 0 auto !important;
     }
 
-    /* 4. 【幅広ボタン】入力枠と同じ幅（280px）で統一 */
+    /* 4. 【幅広ボタン】アニメーション付き */
     div.stButton > button {
-        width: 100% !important;   /* 親要素280pxに対して100% */
-        height: 70px !important;   /* 押しやすい高さ */
+        width: 100% !important;
+        height: 70px !important;
         border-radius: 12px !important;
         font-size: 28px !important;
         font-weight: bold !important;
@@ -38,10 +38,19 @@ st.markdown("""
         color: #1a365d !important;
         border: 1px solid #d1d5db !important;
         display: block !important;
-        margin: 0 auto 8px auto !important; /* ボタンの下に少し隙間 */
+        margin: 0 auto 8px auto !important;
+        transition: all 0.1s ease !important; /* なめらかな変化 */
     }
 
-    /* 5. ログイン・特殊ボタンも幅を統一（色は少し変える） */
+    /* 【重要】押し込みアニメーション (Active状態) */
+    div.stButton > button:active {
+        transform: scale(0.95) !important;      /* 95%の大きさに縮小（沈む） */
+        background-color: #cbd5e0 !important;   /* 少し暗い色にして影を表現 */
+        border: 2px solid #a0aec0 !important;   /* 枠線を強調 */
+        box-shadow: inset 0 3px 5px rgba(0,0,0,0.1) !important; /* 内側に影を付けて凹みを表現 */
+    }
+
+    /* 5. ログイン・特殊ボタンのデザイン */
     div.stButton > button[kind="secondary"] {
         background-color: #e2e8f0 !important;
         height: 60px !important;
@@ -64,7 +73,7 @@ if not st.session_state['authenticated']:
     # 中央に配置された280px幅の入力欄
     password = st.text_input("アクセスパスワードを入力", value=st.session_state['temp_password'], type="password")
 
-    # 1〜5までの幅広ボタンを順番に配置
+    # 1〜5までの幅広ボタン
     nums = ["1", "2", "3", "4", "5"]
     for num in nums:
         if st.button(num, key=f"num_{num}"):
