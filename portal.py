@@ -2,26 +2,30 @@ import streamlit as st
 
 st.set_page_config(page_title="不動産営業支援ポータル", layout="centered")
 
-# iPhone風テンキーのデザイン
+# iPhone風デザインの徹底調整
 st.markdown("""
     <style>
     header[data-testid="stHeader"] { visibility: hidden; }
-    .main-title { font-size: 24px; font-weight: bold; text-align: center; color: #1a365d; margin-top: 20px; }
+    .main-title { font-size: 22px; font-weight: bold; text-align: center; color: #1a365d; margin-top: 30px; }
     .pass-display { 
         font-size: 40px; text-align: center; letter-spacing: 15px; 
-        color: #1a365d; margin: 20px 0; height: 50px;
+        color: #1a365d; margin: 30px 0; height: 50px;
     }
-    /* テンキーボタンのデザイン */
+    /* テンキーの丸ボタンデザイン */
     div.stButton > button {
-        width: 70px !important; height: 70px !important;
-        border-radius: 50% !important; /* 丸ボタン */
-        font-size: 24px !important; font-weight: bold !important;
+        width: 75px !important; height: 75px !important;
+        border-radius: 50% !important;
+        font-size: 26px !important; font-weight: 500 !important;
         background-color: #f0f2f6 !important;
         color: #1a365d !important;
-        border: none !important; margin: 10px auto !important;
+        border: none !important;
         display: flex !important; align-items: center !important; justify-content: center !important;
+        margin: 0 auto !important;
     }
-    /* 業務アプリボタン（ログイン後）のデザイン */
+    /* OK/Clearボタンの調整 */
+    div[data-testid="stVerticalBlock"] > div:last-child button { font-size: 16px !important; }
+    
+    /* ログイン後のリストデザイン */
     a[data-testid="stLinkButton"] {
         width: 100% !important; height: 70px !important;
         border-radius: 15px !important; font-size: 1.1rem !important;
@@ -33,7 +37,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# セッション状態の初期化
+# セッション状態
 if 'logged_in' not in st.session_state:
     st.session_state['logged_in'] = False
 if 'input_pass' not in st.session_state:
@@ -41,47 +45,44 @@ if 'input_pass' not in st.session_state:
 
 # --- 画面分岐 ---
 if not st.session_state['logged_in']:
-    st.markdown('<div class="main-title">ENTER PASSCODE</div>', unsafe_allow_html=True)
+    st.markdown('<div class="main-title">パスコードを入力</div>', unsafe_allow_html=True)
     
-    # 入力状況を「●」で表示
     display_pass = "●" * len(st.session_state['input_pass'])
     st.markdown(f'<div class="pass-display">{display_pass}</div>', unsafe_allow_html=True)
 
-    # テンキーの配置 (3x4形式)
-    keys = [
-        ["1", "2", "3"],
-        ["4", "5", "6"],
-        ["7", "8", "9"],
-        ["Clear", "0", "OK"]
-    ]
-
-    for row in keys:
-        cols = st.columns([1, 1, 1, 1, 1]) # 左右に余白を作って中央寄せ
+    # iPhone配列 (1-2-3 が一行目)
+    # 中央に寄せるためのカラム設定
+    def create_key_row(k1, k2, k3):
+        cols = st.columns([1, 1, 1, 1, 1])
         with cols[1]:
-            if st.button(row[0]):
-                if row[0] == "Clear": st.session_state['input_pass'] = ""
-                else: st.session_state['input_pass'] += row[0]
+            if st.button(k1):
+                if k1 == "Clear": st.session_state['input_pass'] = ""
+                else: st.session_state['input_pass'] += k1
                 st.rerun()
         with cols[2]:
-            if st.button(row[1]):
-                st.session_state['input_pass'] += row[1]
+            if st.button(k2):
+                st.session_state['input_pass'] += k2
                 st.rerun()
         with cols[3]:
-            if st.button(row[2]):
-                if row[2] == "OK":
+            if st.button(k3):
+                if k3 == "OK":
                     if st.session_state['input_pass'] == "1234":
                         st.session_state['logged_in'] = True
-                        st.rerun()
                     else:
-                        st.error("パスワードが違います")
+                        st.error("不正なコードです")
                         st.session_state['input_pass'] = ""
-                        st.rerun()
+                    st.rerun()
                 else:
-                    st.session_state['input_pass'] += row[2]
+                    st.session_state['input_pass'] += k3
                     st.rerun()
 
+    create_key_row("1", "2", "3")
+    create_key_row("4", "5", "6")
+    create_key_row("7", "8", "9")
+    create_key_row("Clear", "0", "OK")
+
 else:
-    # 【ログイン後のアプリリスト画面】
+    # ログイン後の画面
     st.markdown('<div class="main-title">📱 業務アプリ一覧</div>', unsafe_allow_html=True)
     
     st.link_button("🏙️ 暮らしの立地スコア診断", "https://bbmns2pc89m86nxhkvqnet.streamlit.app/")
@@ -92,7 +93,7 @@ else:
     st.link_button("📈 営業進捗管理", "https://my-sales-app-aog993sltv8vseasajfwvr.streamlit.app/")
 
     st.write("---")
-    if st.button("🚪 ログアウトして画面をロック", use_container_width=True):
+    if st.button("🚪 ログアウト", use_container_width=True):
         st.session_state['logged_in'] = False
         st.session_state['input_pass'] = ""
         st.rerun()
