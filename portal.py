@@ -3,42 +3,45 @@ import streamlit as st
 # 1. ページ設定
 st.set_page_config(page_title="不動産営業支援ポータル", layout="centered")
 
-# CSS: 入力欄の微調整に集中
+# CSS: 入力欄の周りの不可視な余白を強制削除
 st.markdown("""
     <style>
     header[data-testid="stHeader"] { visibility: hidden; }
-    .block-container {
-        padding-top: 2rem !important;
-    }
+    .block-container { padding-top: 1.5rem !important; }
     
-    /* 全体を280pxで中央固定 */
+    /* コンテンツ幅固定 */
     [data-testid="stVerticalBlock"] > div {
         width: 280px !important;
         margin-left: auto !important;
         margin-right: auto !important;
     }
 
+    /* タイトルの余白 */
     .title-text {
         font-size: 22px;
         font-weight: bold;
         text-align: center;
         color: #1a365d;
-        margin-bottom: 20px !important;
+        margin-bottom: 10px !important;
     }
 
-    /* 【再調整】入力表示スペース：ボタンと質感を合わせる */
+    /* 【再修正】入力欄：Streamlit特有の上下余白をリセット */
     div[data-testid="stTextInput"] {
-        margin-bottom: 35px !important;
+        padding: 0px !important;
+        margin-bottom: 25px !important;
+    }
+    div[data-testid="stTextInput"] > div {
+        padding: 0px !important;
     }
     div[data-testid="stTextInput"] input {
-        height: 75px !important; /* ボタンと同じ高さに設定 */
+        height: 75px !important; /* ボタンと同じ高さ */
         font-size: 36px !important;
         text-align: center !important;
         border-radius: 18px !important;
-        background-color: #f1f5f9 !important; /* ボタンより少しだけトーンを落として「入力欄」であることを示す */
-        border: 2px solid #cbd5e1 !important; /* 枠線を少し強調して「枠」感を出す */
+        background-color: #f1f5f9 !important;
+        border: 2px solid #cbd5e1 !important;
         color: #1a365d !important;
-        box-shadow: inset 0 2px 4px rgba(0,0,0,0.05) !important; /* 内側に影を入れ、凹んでいる表現 */
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.05) !important;
     }
 
     /* 数字ボタン：1〜5のみ */
@@ -52,9 +55,9 @@ st.markdown("""
         color: #1a365d !important;
         border: 1px solid #cbd5e1 !important;
         display: block !important;
-        margin: 0 auto 12px auto !important; 
+        margin: 0 auto 10px auto !important; 
         transition: transform 0.05s ease !important;
-        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1) !important;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.08) !important;
     }
 
     /* 押し込みアニメーション */
@@ -69,7 +72,6 @@ st.markdown("""
         background-color: #f1f5f9 !important;
         height: 60px !important;
         font-size: 18px !important;
-        margin-top: 15px !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -95,8 +97,8 @@ if not st.session_state['authenticated']:
             st.session_state['temp_password'] = ""
             st.rerun()
 
-    # パスワード入力表示（label_visibility="collapsed"で余計な余白を消去）
-    st.text_input("pw", value=st.session_state['temp_password'], type="password", label_visibility="collapsed")
+    # 入力表示エリア
+    st.text_input("pass_input", value=st.session_state['temp_password'], type="password", label_visibility="collapsed")
 
     # 1〜5までのボタン
     for num in ["1", "2", "3", "4", "5"]:
@@ -113,7 +115,6 @@ if not st.session_state['authenticated']:
 else:
     st.markdown('<div class="title-text">📱 業務アプリ一覧</div>', unsafe_allow_html=True)
     st.write("")
-    
     st.link_button("🏙️ 暮らしのスコア診断", "https://kqhrxuaoh5vmuguuuyfbzg.streamlit.app/")
     st.link_button("🚉 最寄り駅・周辺検索", "https://moyori-6e5qmrnhwfjieq9wfdtcee.streamlit.app/")
     st.link_button("🏢 マンション予想AI", "https://tokyo-mansion-ai-ds4tk2ddjdvxhdnbdcpghz.streamlit.app/")
