@@ -2,17 +2,19 @@ import streamlit as st
 
 st.set_page_config(page_title="不動産営業支援ポータル", layout="centered")
 
-# デザイン（アニメーション・丸ボタン）
+# デザイン設定（CSS）
 st.markdown("""
     <style>
     header[data-testid="stHeader"] { visibility: hidden; }
     .main-title { font-size: 22px; font-weight: bold; text-align: center; color: #1a365d; margin-top: 20px; }
+    
     .pass-display { 
         font-size: 40px; text-align: center; letter-spacing: 15px; 
         color: #1a365d; margin: 15px 0; height: 50px;
     }
-    /* 丸ボタンのスタイル */
-    div.stButton > button {
+
+    /* テンキーボタン（丸） */
+    div.stButton > button:not(.logout-target) {
         width: 70px !important; height: 70px !important;
         border-radius: 50% !important;
         font-size: 24px !important; font-weight: 500 !important;
@@ -22,11 +24,12 @@ st.markdown("""
         margin: 0 auto !important;
         transition: transform 0.1s;
     }
-    div.stButton > button:active {
+    div.stButton > button:not(.logout-target):active {
         transform: scale(0.85) !important;
         background-color: #cbd5e0 !important;
     }
-    /* ログイン後のリスト */
+
+    /* 業務アプリのリンクボタン（巨大な長方形） */
     a[data-testid="stLinkButton"] {
         width: 100% !important; height: 70px !important;
         border-radius: 15px !important; font-size: 1.1rem !important;
@@ -35,18 +38,35 @@ st.markdown("""
         display: flex !important; align-items: center !important; justify-content: center !important;
         text-decoration: none !important; margin-bottom: 12px !important;
     }
+
+    /* ★ログアウトボタン専用：以前のシンプルなスタイルを強制適用★ */
+    .stButton.logout-target > button {
+        width: auto !important;
+        height: auto !important;
+        padding: 4px 16px !important;
+        font-size: 14px !important;
+        font-weight: normal !important;
+        border-radius: 4px !important;
+        background-color: transparent !important;
+        color: #666 !important;
+        border: 1px solid #ccc !important;
+        margin-top: 20px !important;
+        display: inline-block !important;
+    }
     </style>
 """, unsafe_allow_html=True)
 
+# セッション管理
 if 'logged_in' not in st.session_state:
     st.session_state['logged_in'] = False
 if 'input_pass' not in st.session_state:
     st.session_state['input_pass'] = ""
 
+# --- 画面分岐 ---
 if not st.session_state['logged_in']:
+    # 【パスコード画面】
     st.markdown('<div class="main-title">パスコードを入力</div>', unsafe_allow_html=True)
     
-    # 4文字自動判定
     if len(st.session_state['input_pass']) == 4:
         if st.session_state['input_pass'] == "1234":
             st.session_state['logged_in'] = True
@@ -60,18 +80,10 @@ if not st.session_state['logged_in']:
     display_pass = "●" * len(st.session_state['input_pass'])
     st.markdown(f'<div class="pass-display">{display_pass}</div>', unsafe_allow_html=True)
 
-    # テンキー配列（確実に4行作る）
-    rows = [
-        ["1", "2", "3"],
-        ["4", "5", "6"],
-        ["7", "8", "9"],
-        ["CLR", "0", "⬅︎"]
-    ]
+    rows = [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"], ["CLR", "0", "⬅︎"]]
 
-    # ボタンを1行ずつ確実に描画
     for i, row in enumerate(rows):
         c1, c2, c3, c4, c5 = st.columns([1, 1, 1, 1, 1])
-        # 各ボタンに一意のkey（例: btn_0_1）を付けてエラーを回避
         with c2:
             if st.button(row[0], key=f"btn_{i}_0"):
                 if row[0] == "CLR": st.session_state['input_pass'] = ""
@@ -88,7 +100,7 @@ if not st.session_state['logged_in']:
                 st.rerun()
 
 else:
-    # ログイン後
+    # 【ログイン後のリスト画面】
     st.markdown('<div class="main-title">📱 業務アプリ一覧</div>', unsafe_allow_html=True)
     
     st.link_button("🏙️ 暮らしの立地スコア診断", "https://bbmns2pc89m86nxhkvqnet.streamlit.app/")
@@ -99,7 +111,11 @@ else:
     st.link_button("📈 営業進捗管理", "https://my-sales-app-aog993sltv8vseasajfwvr.streamlit.app/")
 
     st.write("---")
-    if st.button("ログアウト", type="secondary"):
+    
+    # ここでログアウトボタンに専用の「目印（logout-target）」をつけて以前の姿に戻します
+    st.markdown('<div class="logout-target">', unsafe_allow_html=True)
+    if st.button("ログアウト", key="logout_btn", type="secondary"):
         st.session_state['logged_in'] = False
         st.session_state['input_pass'] = ""
         st.rerun()
+    st.markdown('</div>', unsafe_allow_html=True)
