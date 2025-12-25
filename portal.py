@@ -13,19 +13,20 @@ st.markdown("""
         color: #1a365d; margin: 15px 0; height: 50px;
     }
 
-    /* 【1】テンキーの丸ボタン（ログイン前） */
-    div.stButton > button:not([kind="secondary"]) {
-        width: 70px !important; height: 70px !important;
-        border-radius: 50% !important;
-        font-size: 24px !important; font-weight: 500 !important;
+    /* 【1】テンキーの丸ボタン（type="primary"を指定したボタンのみ） */
+    div.stButton > button[kind="primary"] {
+        width: 75px !important; height: 75px !important;
+        border-radius: 50% !important; /* ここで丸くしています */
+        font-size: 26px !important; font-weight: 500 !important;
         background-color: #f0f2f6 !important;
         color: #1a365d !important;
         border: none !important;
         margin: 0 auto !important;
         transition: transform 0.1s;
     }
-    div.stButton > button:not([kind="secondary"]):active {
+    div.stButton > button[kind="primary"]:active {
         transform: scale(0.85) !important;
+        background-color: #cbd5e0 !important;
     }
 
     /* 【2】アプリのリンクボタン（巨大な長方形） */
@@ -38,19 +39,18 @@ st.markdown("""
         text-decoration: none !important; margin-bottom: 12px !important;
     }
 
-    /* 【3】ログアウトボタン専用：以前のシンプルなスタイルにリセット */
-    /* st.button(type="secondary") を狙い撃ちします */
+    /* 【3】ログアウトボタン専用（type="secondary"を指定したボタンのみ） */
     div.stButton > button[kind="secondary"] {
         width: auto !important;
         height: auto !important;
         padding: 5px 15px !important;
         font-size: 14px !important;
-        border-radius: 4px !important;
+        border-radius: 4px !important; /* 四角いまま */
         background-color: #f8fafc !important;
         color: #4a5568 !important;
         border: 1px solid #cbd5e0 !important;
         display: block !important;
-        margin-left: auto !important; /* 右寄せ */
+        margin-left: auto !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -78,22 +78,22 @@ if not st.session_state['logged_in']:
     display_pass = "●" * len(st.session_state['input_pass'])
     st.markdown(f'<div class="pass-display">{display_pass}</div>', unsafe_allow_html=True)
 
-    # テンキー配列
     rows = [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"], ["CLR", "0", "⬅︎"]]
 
     for i, row in enumerate(rows):
         c1, c2, c3, c4, c5 = st.columns([1, 1, 1, 1, 1])
+        # 全てのテンキーに type="primary" を指定
         with c2:
-            if st.button(row[0], key=f"btn_{i}_0"):
+            if st.button(row[0], key=f"btn_{i}_0", type="primary"):
                 if row[0] == "CLR": st.session_state['input_pass'] = ""
                 else: st.session_state['input_pass'] += row[0]
                 st.rerun()
         with c3:
-            if st.button(row[1], key=f"btn_{i}_1"):
+            if st.button(row[1], key=f"btn_{i}_1", type="primary"):
                 st.session_state['input_pass'] += row[1]
                 st.rerun()
         with c4:
-            if st.button(row[2], key=f"btn_{i}_2"):
+            if st.button(row[2], key=f"btn_{i}_2", type="primary"):
                 if row[2] == "⬅︎": st.session_state['input_pass'] = st.session_state['input_pass'][:-1]
                 else: st.session_state['input_pass'] += row[2]
                 st.rerun()
@@ -111,8 +111,8 @@ else:
 
     st.write("---")
     
-    # 【修正箇所】ログアウトボタンを右下に、以前の形式で表示
-    if st.button("ログアウト", type="secondary"):
+    # ログアウトボタンだけ type="secondary" を指定
+    if st.button("ログアウト", key="logout_btn", type="secondary"):
         st.session_state['logged_in'] = False
         st.session_state['input_pass'] = ""
         st.rerun()
