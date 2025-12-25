@@ -2,26 +2,26 @@ import streamlit as st
 
 st.set_page_config(page_title="不動産営業支援ポータル", layout="centered")
 
-# CSS: 全機種で横並びを維持しつつ、幅をスリムに調整
+# CSS: 限界までコンパクトにし、中央寄せを徹底する
 st.markdown("""
     <style>
     header[data-testid="stHeader"] { visibility: hidden; }
-    .block-container { padding: 1.5rem 1rem !important; }
+    .block-container { padding: 1rem 0.5rem !important; }
 
-    /* 1. タイトルと入力表示 */
-    .main-title { font-size: 18px; font-weight: bold; text-align: center; color: #1a365d; margin-bottom: 5px; }
-    .pass-display { font-size: 36px; text-align: center; letter-spacing: 12px; color: #1a365d; height: 50px; }
+    /* 1. タイトルとパス表示 */
+    .main-title { font-size: 18px; font-weight: bold; text-align: center; color: #1a365d; margin-bottom: 0px; }
+    .pass-display { font-size: 32px; text-align: center; letter-spacing: 10px; color: #1a365d; height: 45px; margin-top: 5px; }
 
-    /* 2. キーパッド全体の幅をスマホに合わせる (ここが肝) */
+    /* 2. 【改善】横幅をさらに絞り、スマホ画面から絶対にはみ出さないように固定 */
     [data-testid="stHorizontalBlock"] {
         display: flex !important;
         flex-direction: row !important;
         flex-wrap: nowrap !important;
         justify-content: center !important;
-        gap: 6px !important;            /* 間隔を狭くした(10px -> 6px) */
+        gap: 5px !important;            /* 隙間を最小限に */
         width: 100% !important;
-        max-width: 280px !important;    /* 全体幅をさらに絞った(320px -> 280px) */
-        margin: 0 auto 6px auto !important;
+        max-width: 250px !important;    /* 280pxから250pxへ縮小 */
+        margin: 0 auto 5px auto !important;
     }
     
     [data-testid="column"] {
@@ -29,29 +29,36 @@ st.markdown("""
         min-width: 0 !important;
     }
 
-    /* 3. ボタン自体のサイズとデザイン */
+    /* 3. ボタン：余白をゼロにし、中央配置を強制 */
     div.stButton > button[kind="primary"] {
         width: 100% !important;
-        aspect-ratio: 1.1 / 1 !important; /* 少しだけ横長にして高さを抑えた */
+        aspect-ratio: 1.2 / 1 !important;
         border-radius: 8px !important;
-        font-size: 22px !important;      /* 文字も少しスリムに */
+        font-size: 20px !important;      /* 文字も少し小さくしてバランス調整 */
         font-weight: bold !important;
         background-color: #f0f2f6 !important;
         color: #1a365d !important;
         border: 1px solid #d1d5db !important;
+        
+        /* 内部の余白を完全に消して中央に寄せる */
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
         padding: 0 !important;
+        min-height: 0 !important;
     }
 
-    /* 数字の中央寄せ徹底 */
+    /* 数字の位置調整（ブラウザごとの微差を解消） */
+    div.stButton > button[kind="primary"] div {
+        display: flex !important;
+        align-items: center !important;
+    }
     div.stButton > button[kind="primary"] p {
         margin: 0 !important;
         line-height: 1 !important;
     }
     
-    /* 押し込んだ時の沈む動き */
+    /* 押し込んだ時の動き */
     div.stButton > button[kind="primary"]:active {
         transform: scale(0.92) !important;
         background-color: #cbd5e0 !important;
@@ -60,10 +67,8 @@ st.markdown("""
     /* ログアウトボタン */
     div.stButton > button[kind="secondary"] {
         width: auto !important;
-        padding: 4px 12px !important;
-        font-size: 13px !important;
-        border-radius: 4px !important;
-        display: block !important;
+        padding: 2px 10px !important;
+        font-size: 12px !important;
         margin-left: auto !important;
     }
     </style>
@@ -91,7 +96,6 @@ if not st.session_state['logged_in']:
     display_dots = "●" * len(st.session_state['input_pass'])
     st.markdown(f'<div class="pass-display">{display_dots}</div>', unsafe_allow_html=True)
 
-    # 行作成関数
     def create_row(keys):
         cols = st.columns(3)
         for i, key in enumerate(keys):
@@ -111,8 +115,7 @@ else:
     st.markdown('<h3 style="text-align:center;">📱 業務アプリ一覧</h3>', unsafe_allow_html=True)
     st.link_button("🏙️ 暮らしの立地スコア診断", "https://bbmns2pc89m86nxhkvqnet.streamlit.app/", use_container_width=True)
     st.link_button("🚉 最寄り駅・周辺検索", "https://moyori-6e5qmrnhwfjieq9wfdtcee.streamlit.app/", use_container_width=True)
-    st.link_button("🏢 マンション予想AI", "https://tokyo-mansion-ai-ds4tk2ddjdvxhdnbdcpghz.streamlit.app/", use_container_width=True)
-
+    
     st.write("---")
     if st.button("ログアウト", type="secondary"):
         st.session_state['logged_in'] = False
