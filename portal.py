@@ -3,12 +3,12 @@ import streamlit as st
 # 1. ページ設定
 st.set_page_config(page_title="不動産営業支援ポータル", layout="centered")
 
-# CSS: 入力欄の仕様は維持し、最上部の余白のみ微調整
+# CSS: 上部余白を1.0remに調整し、その他のデザインは完全維持
 st.markdown("""
     <style>
     header[data-testid="stHeader"] { visibility: hidden; }
     
-    /* 【修正】上部余白を 1.5rem → 1.0rem へ微減 */
+    /* 【修正】上部余白を 1.0rem に設定 */
     .block-container { padding-top: 1.0rem !important; }
     
     /* コンテンツ幅固定 */
@@ -127,4 +127,3 @@ else:
     if st.button("ログアウト", key="logout_btn", type="secondary"):
         st.session_state['authenticated'] = False
         st.rerun()
-
