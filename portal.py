@@ -3,13 +3,13 @@ import streamlit as st
 # 1. ページ設定
 st.set_page_config(page_title="不動産営業支援ポータル", layout="centered")
 
-# CSS: 5ボタン最適化レイアウト
+# CSS: 5ボタンに最適化した究極のバランス調整
 st.markdown("""
     <style>
     /* ヘッダー・余白の最小化 */
     header[data-testid="stHeader"] { visibility: hidden; }
     .block-container {
-        padding-top: 2rem !important; /* 少し下げて落ち着かせる */
+        padding-top: 2rem !important;
         padding-bottom: 0rem !important;
     }
     
@@ -29,12 +29,12 @@ st.markdown("""
         margin-bottom: 20px !important;
     }
 
-    /* 【拡張】入力表示スペース */
+    /* 入力表示スペース（0が消えた分、ゆとりを持たせる） */
     div[data-testid="stTextInput"] {
-        margin-bottom: 40px !important; /* ボタンとの間隔をさらに広く */
+        margin-bottom: 40px !important; 
     }
     div[data-testid="stTextInput"] input {
-        height: 70px !important; /* 入力枠をさらに高く */
+        height: 70px !important;
         font-size: 32px !important;
         text-align: center !important;
         border-radius: 15px !important;
@@ -42,7 +42,7 @@ st.markdown("""
         border: 2px solid #e2e8f0 !important;
     }
 
-    /* 【調整】数字ボタン：5つに絞ったため間隔と高さを最適化 */
+    /* 数字ボタン：1〜5に絞って配置 */
     div.stButton > button {
         width: 100% !important;
         height: 75px !important; 
@@ -53,8 +53,8 @@ st.markdown("""
         color: #1a365d !important;
         border: 1px solid #cbd5e1 !important;
         display: block !important;
-        margin: 0 auto 15px auto !important; /* ボタン同士の間隔を広く */
-        transition: transform 0.05s ease, background-color 0.05s !important;
+        margin: 0 auto 15px auto !important; 
+        transition: transform 0.05s ease !important;
         box-shadow: 0 2px 4px rgba(0,0,0,0.05) !important;
     }
 
@@ -63,7 +63,6 @@ st.markdown("""
         transform: scale(0.92) !important;
         background-color: #1a365d !important;
         color: #ffffff !important;
-        box-shadow: none !important;
     }
 
     /* 修正ボタン */
@@ -72,17 +71,6 @@ st.markdown("""
         height: 60px !important;
         font-size: 18px !important;
         margin-top: 10px !important;
-    }
-
-    /* ログイン後のリストボタン */
-    a[data-testid="stLinkButton"] {
-        width: 100% !important; height: 75px !important;
-        border-radius: 15px !important; font-size: 1.2rem !important;
-        font-weight: bold !important; background-color: #ffffff !important;
-        color: #1a365d !important; border: 2px solid #f1f5f9 !important;
-        display: flex !important; align-items: center !important; justify-content: center !important;
-        text-decoration: none !important; margin-bottom: 15px !important;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.05) !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -97,7 +85,7 @@ if 'temp_password' not in st.session_state:
 if not st.session_state['authenticated']:
     st.markdown('<div class="title-text">🔒 営業支援システム</div>', unsafe_allow_html=True)
     
-    # 即時ログイン判定
+    # 即時ログイン判定（4桁入力で即遷移）
     if len(st.session_state['temp_password']) >= 4:
         if st.session_state['temp_password'] == "1234":
             st.session_state['authenticated'] = True
@@ -108,16 +96,16 @@ if not st.session_state['authenticated']:
             st.session_state['temp_password'] = ""
             st.rerun()
 
-    # 入力表示エリア（さらに高く、見やすく）
+    # パスワード入力エリア
     st.text_input("pass", value=st.session_state['temp_password'], type="password", label_visibility="collapsed")
 
-    # 1〜5までのボタン
+    # 1〜5までのボタンのみを表示
     for num in ["1", "2", "3", "4", "5"]:
         if st.button(num, key=f"num_{num}"):
             st.session_state['temp_password'] += num
             st.rerun()
 
-    # 修正ボタン
+    # 削除ボタン
     if st.button("⬅︎ 一文字削除", key="del_key", type="secondary"):
         st.session_state['temp_password'] = st.session_state['temp_password'][:-1]
         st.rerun()
