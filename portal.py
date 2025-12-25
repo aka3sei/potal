@@ -60,6 +60,8 @@ else:
             </a>
         """, unsafe_allow_html=True)
 
-    if st.button("ログアウト", style="margin-top:50px"):
+    st.write("") # スペースを空ける
+    if st.button("ログアウト", use_container_width=True):
         st.session_state['authenticated'] = False
+
         st.rerun()
