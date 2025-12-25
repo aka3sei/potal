@@ -3,26 +3,17 @@ import streamlit as st
 # 1. ページ設定
 st.set_page_config(page_title="不動産営業支援ポータル", layout="centered")
 
-# CSS: 入力枠のサイズ調整とボタンデザインの維持
+# CSS: 入力欄の周りの不可視な余白を強制削除
 st.markdown("""
     <style>
     header[data-testid="stHeader"] { visibility: hidden; }
+    .block-container { padding-top: 1.5rem !important; }
     
-    /* コンテンツを280px幅で中央揃え */
+    /* コンテンツ幅固定 */
     [data-testid="stVerticalBlock"] > div {
         width: 280px !important;
         margin-left: auto !important;
         margin-right: auto !important;
-    }
-
-    /* 【入力枠の修正】 */
-    /* 枠全体の高さを出し、文字を中央に大きく表示 */
-    div[data-testid="stTextInput"] input {
-        height: 65px !important;
-        font-size: 30px !important; /* パスワードの「●」を大きく */
-        text-align: center !important;
-        border-radius: 12px !important;
-        border: 1px solid #d1d5db !important;
     }
 
     /* タイトルの余白 */
@@ -31,10 +22,29 @@ st.markdown("""
         font-weight: bold;
         text-align: center;
         color: #1a365d;
-        margin-bottom: 20px !important;
+        margin-bottom: 10px !important;
     }
 
-    /* 数字ボタンのデザイン（維持） */
+    /* 【再修正】入力欄：Streamlit特有の上下余白をリセット */
+    div[data-testid="stTextInput"] {
+        padding: 0px !important;
+        margin-bottom: 25px !important;
+    }
+    div[data-testid="stTextInput"] > div {
+        padding: 0px !important;
+    }
+    div[data-testid="stTextInput"] input {
+        height: 75px !important; /* ボタンと同じ高さ */
+        font-size: 36px !important;
+        text-align: center !important;
+        border-radius: 18px !important;
+        background-color: #f1f5f9 !important;
+        border: 2px solid #cbd5e1 !important;
+        color: #1a365d !important;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.05) !important;
+    }
+
+    /* 数字ボタン：1〜5のみ */
     div.stButton > button {
         width: 100% !important;
         height: 75px !important; 
@@ -76,7 +86,7 @@ if 'temp_password' not in st.session_state:
 if not st.session_state['authenticated']:
     st.markdown('<div class="title-text">🔒 営業支援システム</div>', unsafe_allow_html=True)
     
-    # 即時ログイン判定（4桁入力で即遷移）
+    # 4桁即時ログイン
     if len(st.session_state['temp_password']) >= 4:
         if st.session_state['temp_password'] == "1234":
             st.session_state['authenticated'] = True
@@ -87,8 +97,8 @@ if not st.session_state['authenticated']:
             st.session_state['temp_password'] = ""
             st.rerun()
 
-    # 入力表示枠
-    st.text_input("pass", value=st.session_state['temp_password'], type="password", label_visibility="collapsed")
+    # 入力表示エリア
+    st.text_input("pass_input", value=st.session_state['temp_password'], type="password", label_visibility="collapsed")
 
     # 1〜5までのボタン
     for num in ["1", "2", "3", "4", "5"]:
