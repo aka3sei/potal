@@ -3,11 +3,13 @@ import streamlit as st
 # 1. ページ設定
 st.set_page_config(page_title="不動産営業支援ポータル", layout="centered")
 
-# CSS: 入力欄の周りの不可視な余白を強制削除
+# CSS: 入力欄の仕様は維持し、最上部の余白のみ微調整
 st.markdown("""
     <style>
     header[data-testid="stHeader"] { visibility: hidden; }
-    .block-container { padding-top: 1.5rem !important; }
+    
+    /* 【修正】上部余白を 1.5rem → 0.8rem へ微減 */
+    .block-container { padding-top: 0.8rem !important; }
     
     /* コンテンツ幅固定 */
     [data-testid="stVerticalBlock"] > div {
@@ -25,7 +27,7 @@ st.markdown("""
         margin-bottom: 10px !important;
     }
 
-    /* 【再修正】入力欄：Streamlit特有の上下余白をリセット */
+    /* 入力欄のデザイン（現状維持） */
     div[data-testid="stTextInput"] {
         padding: 0px !important;
         margin-bottom: 25px !important;
@@ -34,7 +36,7 @@ st.markdown("""
         padding: 0px !important;
     }
     div[data-testid="stTextInput"] input {
-        height: 75px !important; /* ボタンと同じ高さ */
+        height: 75px !important;
         font-size: 36px !important;
         text-align: center !important;
         border-radius: 18px !important;
@@ -44,7 +46,7 @@ st.markdown("""
         box-shadow: inset 0 2px 4px rgba(0,0,0,0.05) !important;
     }
 
-    /* 数字ボタン：1〜5のみ */
+    /* 数字ボタン：1〜5（現状維持） */
     div.stButton > button {
         width: 100% !important;
         height: 75px !important; 
