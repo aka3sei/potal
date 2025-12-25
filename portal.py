@@ -3,15 +3,15 @@ import streamlit as st
 # 1. ページ設定
 st.set_page_config(page_title="不動産営業支援ポータル", layout="centered")
 
-# CSS: 5ボタン専用の究極バランス
+# CSS: 入力欄の微調整に集中
 st.markdown("""
     <style>
     header[data-testid="stHeader"] { visibility: hidden; }
     .block-container {
-        padding-top: 3rem !important; /* 上部にゆとりを持たせる */
+        padding-top: 2rem !important;
     }
     
-    /* 280px幅で中央固定 */
+    /* 全体を280pxで中央固定 */
     [data-testid="stVerticalBlock"] > div {
         width: 280px !important;
         margin-left: auto !important;
@@ -23,42 +23,43 @@ st.markdown("""
         font-weight: bold;
         text-align: center;
         color: #1a365d;
-        margin-bottom: 25px !important;
+        margin-bottom: 20px !important;
     }
 
-    /* 入力エリアの装飾と余白 */
+    /* 【再調整】入力表示スペース：ボタンと質感を合わせる */
     div[data-testid="stTextInput"] {
-        margin-bottom: 50px !important; /* ボタン群との距離を最大化 */
+        margin-bottom: 35px !important;
     }
     div[data-testid="stTextInput"] input {
-        height: 75px !important;
+        height: 75px !important; /* ボタンと同じ高さに設定 */
         font-size: 36px !important;
         text-align: center !important;
         border-radius: 18px !important;
-        background-color: #f8fafc !important;
-        border: 2px solid #e2e8f0 !important;
-        box-shadow: inset 0 2px 4px rgba(0,0,0,0.02) !important;
+        background-color: #f1f5f9 !important; /* ボタンより少しだけトーンを落として「入力欄」であることを示す */
+        border: 2px solid #cbd5e1 !important; /* 枠線を少し強調して「枠」感を出す */
+        color: #1a365d !important;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.05) !important; /* 内側に影を入れ、凹んでいる表現 */
     }
 
     /* 数字ボタン：1〜5のみ */
     div.stButton > button {
         width: 100% !important;
-        height: 78px !important; 
-        border-radius: 20px !important;
+        height: 75px !important; 
+        border-radius: 18px !important;
         font-size: 34px !important; 
         font-weight: bold !important;
         background-color: #ffffff !important;
         color: #1a365d !important;
         border: 1px solid #cbd5e1 !important;
         display: block !important;
-        margin: 0 auto 15px auto !important; 
-        transition: transform 0.1s ease !important;
-        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05) !important;
+        margin: 0 auto 12px auto !important; 
+        transition: transform 0.05s ease !important;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1) !important;
     }
 
-    /* 押し込みアニメーション（確実な反応） */
+    /* 押し込みアニメーション */
     div.stButton > button:active {
-        transform: scale(0.90) !important;
+        transform: scale(0.92) !important;
         background-color: #1a365d !important;
         color: #ffffff !important;
     }
@@ -68,8 +69,7 @@ st.markdown("""
         background-color: #f1f5f9 !important;
         height: 60px !important;
         font-size: 18px !important;
-        border: none !important;
-        margin-top: 20px !important;
+        margin-top: 15px !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -95,10 +95,10 @@ if not st.session_state['authenticated']:
             st.session_state['temp_password'] = ""
             st.rerun()
 
-    # パスワード入力表示
+    # パスワード入力表示（label_visibility="collapsed"で余計な余白を消去）
     st.text_input("pw", value=st.session_state['temp_password'], type="password", label_visibility="collapsed")
 
-    # 【修正】完全に1, 2, 3, 4, 5 だけのリストに変更
+    # 1〜5までのボタン
     for num in ["1", "2", "3", "4", "5"]:
         if st.button(num, key=f"num_{num}"):
             st.session_state['temp_password'] += num
@@ -120,4 +120,7 @@ else:
     st.link_button("📈 営業進捗管理", "https://my-sales-app-aog993sltv8vseasajfwvr.streamlit.app/")
     st.link_button("💰 ローン診断", "https://kqhrxuaoh5vmuguuuyfbzg.streamlit.app/")
 
-    st.write
+    st.write("---")
+    if st.button("ログアウト", key="logout_btn", type="secondary"):
+        st.session_state['authenticated'] = False
+        st.rerun()
