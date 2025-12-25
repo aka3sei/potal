@@ -1,67 +1,58 @@
 import streamlit as st
 
-# ページ設定
-st.set_page_config(page_title="不動産営業支援ポータル", layout="centered", initial_sidebar_state="collapsed")
+# 1. ページ設定
+st.set_page_config(page_title="不動産営業支援ポータル", layout="centered")
 
-# CSSでアプリっぽいデザインに調整
+# CSSでボタンを大きく、アプリ風に整える
 st.markdown("""
     <style>
     header[data-testid="stHeader"] { visibility: hidden; }
     .main-title { font-size: 24px; font-weight: bold; text-align: center; color: #1a365d; margin-bottom: 30px; }
-    .app-card {
-        background-color: #f8fafc;
-        border: 1px solid #e2e8f0;
+    /* ボタンの余白やデザインを調整 */
+    div.stButton > button {
+        width: 100%;
+        height: 80px;
         border-radius: 15px;
-        padding: 20px;
-        text-align: center;
-        margin-bottom: 15px;
-        transition: 0.3s;
+        font-size: 1.2rem !important;
+        font-weight: bold !important;
+        background-color: #ffffff !important;
+        color: #1a365d !important;
+        border: 2px solid #e2e8f0 !important;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05) !important;
+        margin-bottom: 10px;
     }
-    .app-link {
-        text-decoration: none;
-        color: #1e293b;
-        font-weight: bold;
-        display: block;
+    div.stButton > button:active {
+        background-color: #edf2f7 !important;
+        transform: scale(0.98);
     }
     </style>
 """, unsafe_allow_html=True)
 
-# 1. パスワード認証（ロック画面）
+# 1. パスワード認証
 if 'authenticated' not in st.session_state:
     st.session_state['authenticated'] = False
 
 if not st.session_state['authenticated']:
     st.markdown('<div class="main-title">🔒 営業支援システム</div>', unsafe_allow_html=True)
     password = st.text_input("アクセスパスワードを入力", type="password")
-    if st.button("ログイン", use_container_width=True):
-        if password == "1234":  # ← 好きなパスワードに変更してください
+    if st.button("ログイン"):
+        if password == "1234":
             st.session_state['authenticated'] = True
             st.rerun()
         else:
             st.error("パスワードが正しくありません")
 else:
-    # 2. アプリリスト（2枚目の画面）
+    # 2. アプリリスト（標準のlink_buttonを使用）
     st.markdown('<div class="main-title">📱 業務アプリ一覧</div>', unsafe_allow_html=True)
     
-    # 各アプリのリンク設定
-    apps = [
-        {"name": "🏙️ 暮らしのスコア診断", "url": "https://kqhrxuaoh5vmuguuuyfbzg.streamlit.app/"},
-        {"name": "🏢 マンション予想AI", "url": "https://tokyo-mansion-ai-ds4tk2ddjdvxhdnbdcpghz.streamlit.app/"},
-        {"name": "📈 営業進捗管理", "url": "https://my-sales-app-aog993sltv8vseasajfwvr.streamlit.app/"},
-        {"name": "💰 ローン診断", "url": "https://kqhrxuaoh5vmuguuuyfbzg.streamlit.app/"}
-    ]
+    # st.link_buttonは、ブラウザが「同じ画面で開く」か「別タブで開く」かを
+    # 状況に応じて最適に判断してくれます。
+    st.link_button("🏙️ 暮らしのスコア診断", "https://kqhrxuaoh5vmuguuuyfbzg.streamlit.app/")
+    st.link_button("🏢 マンション予想AI", "https://tokyo-mansion-ai-ds4tk2ddjdvxhdnbdcpghz.streamlit.app/")
+    st.link_button("📈 営業進捗管理", "https://my-sales-app-aog993sltv8vseasajfwvr.streamlit.app/")
+    st.link_button("💰 ローン診断", "https://kqhrxuaoh5vmuguuuyfbzg.streamlit.app/")
 
-    for app in apps:
-        st.markdown(f"""
-            <a href="{app['url']}" target="_self" class="app-link">
-                <div class="app-card">
-                    {app['name']}
-                </div>
-            </a>
-        """, unsafe_allow_html=True)
-
-    st.write("") # スペースを空ける
-    if st.button("ログアウト", use_container_width=True):
+    st.write("---")
+    if st.button("ログアウト", type="secondary"):
         st.session_state['authenticated'] = False
-
         st.rerun()
