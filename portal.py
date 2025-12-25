@@ -2,25 +2,34 @@ import streamlit as st
 
 st.set_page_config(page_title="不動産営業支援ポータル", layout="centered")
 
-# CSS: 強制横並びと中央配置の徹底
+# CSS: すべての要素を中央に集約する
 st.markdown("""
     <style>
     header[data-testid="stHeader"] { visibility: hidden; }
-    .main-title { font-size: 20px; font-weight: bold; text-align: center; color: #1a365d; margin-top: 10px; }
     
-    /* パスコード表示 */
+    /* 1. タイトルとパス表示の中央揃え */
+    .main-title { 
+        font-size: 20px; font-weight: bold; text-align: center; 
+        color: #1a365d; margin-top: 10px; width: 100%;
+    }
     .pass-display { 
         font-size: 40px; text-align: center; letter-spacing: 15px; 
-        color: #1a365d; margin: 15px 0; height: 50px; line-height: 50px;
+        color: #1a365d; margin: 10px 0; height: 50px; line-height: 50px; width: 100%;
     }
 
-    /* 【超重要】スマホでも強制的に横に並べる魔法の命令 */
+    /* 2. テンキー全体の幅を制限して中央に寄せる */
+    .keypad-container {
+        max-width: 300px;
+        margin: 0 auto !important;
+    }
+
+    /* 3. スマホでも横3列を死守する設定 */
     [data-testid="stHorizontalBlock"] {
         display: flex !important;
         flex-direction: row !important;
         flex-wrap: nowrap !important;
-        gap: 8px !important;
-        margin-bottom: 8px !important;
+        justify-content: center !important;
+        gap: 10px !important;
         width: 100% !important;
     }
     [data-testid="column"] {
@@ -28,43 +37,35 @@ st.markdown("""
         min-width: 0 !important;
     }
 
-    /* テンキーボタンのデザイン（中央寄せ徹底） */
+    /* 4. テンキーボタン自体のデザイン */
     div.stButton > button[kind="primary"] {
         width: 100% !important;
-        aspect-ratio: 1.3 / 1 !important;
+        aspect-ratio: 1.2 / 1 !important;
         border-radius: 10px !important;
         font-size: 24px !important;
         font-weight: bold !important;
         background-color: #f0f2f6 !important;
         color: #1a365d !important;
         border: 1px solid #d1d5db !important;
-        
-        /* 数字をど真ん中に固定 */
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
         padding: 0 !important;
-        margin: 0 !important;
     }
 
-    /* ボタンの中の余計な隙間を全消去 */
-    div.stButton > button[kind="primary"] div {
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-    }
-    div.stButton > button[kind="primary"] p {
+    /* ボタン内のテキスト中央寄せ */
+    div.stButton > button[kind="primary"] div p {
         margin: 0 !important;
         line-height: 1 !important;
     }
     
-    /* 押し込んだ時の沈む動き */
+    /* 反応アニメーション */
     div.stButton > button[kind="primary"]:active {
-        transform: scale(0.92) !important;
+        transform: scale(0.90) !important;
         background-color: #cbd5e0 !important;
     }
 
-    /* 業務アプリリンク */
+    /* ログイン後のリストデザイン */
     a[data-testid="stLinkButton"] {
         width: 100% !important; height: 65px !important;
         border-radius: 12px !important; font-size: 1.1rem !important;
@@ -74,13 +75,13 @@ st.markdown("""
         text-decoration: none !important; margin-bottom: 10px !important;
     }
 
-    /* ログアウトボタン（以前のスタイル） */
+    /* ログアウトボタン */
     div.stButton > button[kind="secondary"] {
         width: auto !important; height: auto !important;
         padding: 4px 12px !important; font-size: 14px !important;
         border-radius: 4px !important; background-color: #f8fafc !important;
         color: #4a5568 !important; border: 1px solid #cbd5e0 !important;
-        display: block !important; margin-left: auto !important;
+        display: block !important; margin: 20px 0 0 auto !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -90,9 +91,11 @@ if 'logged_in' not in st.session_state:
 if 'input_pass' not in st.session_state:
     st.session_state['input_pass'] = ""
 
+# --- パスコード画面 ---
 if not st.session_state['logged_in']:
     st.markdown('<div class="main-title">パスコードを入力</div>', unsafe_allow_html=True)
     
+    # 4文字入力自動判定
     if len(st.session_state['input_pass']) == 4:
         if st.session_state['input_pass'] == "1234":
             st.session_state['logged_in'] = True
@@ -106,6 +109,8 @@ if not st.session_state['logged_in']:
     display_pass = "●" * len(st.session_state['input_pass'])
     st.markdown(f'<div class="pass-display">{display_pass}</div>', unsafe_allow_html=True)
 
+    # テンキーエリア（中央寄せコンテナ）
+    st.markdown('<div class="keypad-container">', unsafe_allow_html=True)
     rows = [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"], ["CLR", "0", "⬅︎"]]
 
     for i, row in enumerate(rows):
@@ -117,6 +122,9 @@ if not st.session_state['logged_in']:
                     elif val == "⬅︎": st.session_state['input_pass'] = st.session_state['input_pass'][:-1]
                     else: st.session_state['input_pass'] += val
                     st.rerun()
+    st.markdown('</div>', unsafe_allow_html=True)
+
+# --- ログイン後 ---
 else:
     st.markdown('<div class="main-title">📱 業務アプリ一覧</div>', unsafe_allow_html=True)
     st.link_button("🏙️ 暮らしの立地スコア診断", "https://bbmns2pc89m86nxhkvqnet.streamlit.app/")
