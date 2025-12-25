@@ -2,47 +2,61 @@ import streamlit as st
 
 st.set_page_config(page_title="不動産営業支援ポータル", layout="centered")
 
-# CSS: スマホでも強制的に横3列にする設定
+# CSS: 配置バランスと中央寄せの徹底
 st.markdown("""
     <style>
     header[data-testid="stHeader"] { visibility: hidden; }
-    .main-title { font-size: 22px; font-weight: bold; text-align: center; color: #1a365d; margin-top: 20px; }
+    .main-title { font-size: 20px; font-weight: bold; text-align: center; color: #1a365d; margin-top: 20px; }
     
+    /* パスコード表示 */
     .pass-display { 
         font-size: 40px; text-align: center; letter-spacing: 15px; 
-        color: #1a365d; margin: 15px 0; height: 50px;
+        color: #1a365d; margin: 20px 0; height: 50px; line-height: 50px;
     }
 
-    /* ★重要：ボタンの親要素を横並び(Flex)にする */
-    [data-testid="column"] {
-        flex: 1 1 0% !important;
-        min-width: 0px !important;
-    }
+    /* 横並びを強制し、隙間を均等にする */
     [data-testid="stHorizontalBlock"] {
         display: flex !important;
         flex-direction: row !important;
-        flex-wrap: nowrap !important;
         justify-content: center !important;
-        gap: 10px !important;
+        gap: 12px !important;
+        margin-bottom: 12px !important;
+    }
+    [data-testid="column"] {
+        flex: 1 !important;
+        min-width: 0px !important;
     }
 
-    /* テンキーボタンのデザインとアニメーション */
+    /* 【テンキーボタン】デザインの徹底修正 */
     div.stButton > button[kind="primary"] {
-        width: 100% !important; 
-        height: 65px !important;
+        width: 100% !important;
+        aspect-ratio: 1.2 / 1 !important; /* 横幅に対して高さを調整し黄金比に近づける */
+        padding: 0 !important; /* 内部余白をリセット */
         border-radius: 12px !important;
-        font-size: 24px !important; 
+        font-size: 26px !important;
         font-weight: bold !important;
         background-color: #f0f2f6 !important;
         color: #1a365d !important;
         border: 1px solid #d1d5db !important;
-        transition: transform 0.1s;
+        
+        /* 数字をど真ん中に配置 */
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        line-height: 0 !important;
+    }
+
+    /* 数字のテキスト自体への微調整（Streamlit特有のズレを解消） */
+    div.stButton > button[kind="primary"] div p {
+        margin: 0 !important;
+        padding: 0 !important;
+        line-height: 1 !important;
     }
     
     /* 押し込んだ時の沈む動き */
     div.stButton > button[kind="primary"]:active {
-        transform: scale(0.90) !important;
-        background-color: #cbd5e0 !important;
+        transform: scale(0.92) !important;
+        background-color: #e2e8f0 !important;
     }
 
     /* 業務アプリのリンクボタン */
@@ -91,8 +105,8 @@ if not st.session_state['logged_in']:
     # テンキー配列（3列）
     rows = [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"], ["CLR", "0", "⬅︎"]]
 
+    # 配置コンテナ
     for i, row in enumerate(rows):
-        # カラムを3つだけ作り、横に並べる
         cols = st.columns(3)
         for j, val in enumerate(row):
             with cols[j]:
