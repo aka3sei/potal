@@ -3,76 +3,85 @@ import streamlit as st
 # 1. ページ設定
 st.set_page_config(page_title="不動産営業支援ポータル", layout="centered")
 
-# CSS: 上部余白の極小化、中央揃え、巨大ボタン
+# CSS: バランスの再構築
 st.markdown("""
     <style>
-    /* ヘッダーと余白を徹底排除 */
+    /* ヘッダー・余白の最小化 */
     header[data-testid="stHeader"] { visibility: hidden; }
     .block-container {
-        padding-top: 0.5rem !important;
+        padding-top: 1rem !important;
         padding-bottom: 0rem !important;
     }
     
-    /* コンテンツ全体を中央寄せ、幅固定 */
+    /* コンテンツ幅固定と中央寄せ */
     [data-testid="stVerticalBlock"] > div {
         width: 280px !important;
         margin-left: auto !important;
         margin-right: auto !important;
     }
 
+    /* タイトル */
     .title-text {
-        font-size: 22px;
+        font-size: 20px;
         font-weight: bold;
         text-align: center;
         color: #1a365d;
-        margin-bottom: 5px !important;
+        margin-bottom: 10px !important;
     }
 
-    /* ボタンデザイン：高さをさらに出し、押しやすさを追求 */
+    /* 【修正】入力表示スペースの高さを広げる */
+    div[data-testid="stTextInput"] {
+        margin-bottom: 25px !important; /* ボタンとの間隔を広げてゆとりを持たせる */
+    }
+    div[data-testid="stTextInput"] input {
+        height: 60px !important; /* 入力枠自体の高さを出して視認性アップ */
+        font-size: 24px !important;
+        text-align: center !important;
+        border-radius: 12px !important;
+    }
+
+    /* 【修正】数字ボタン：高さを少し低く（85px → 72px） */
     div.stButton > button {
         width: 100% !important;
-        height: 85px !important; /* 高さを85pxにアップ */
-        border-radius: 18px !important;
-        font-size: 36px !important; /* 数字をさらに巨大に */
+        height: 72px !important; 
+        border-radius: 15px !important;
+        font-size: 32px !important; 
         font-weight: bold !important;
         background-color: #f8fafc !important;
         color: #1a365d !important;
         border: 1px solid #cbd5e1 !important;
         display: block !important;
-        margin: 0 auto 12px auto !important;
+        margin: 0 auto 10px auto !important;
         transition: transform 0.05s ease !important;
     }
 
-    /* 押し込みアニメーション：深く沈み、色が反転 */
+    /* 押し込みアニメーション */
     div.stButton > button:active {
-        transform: scale(0.88) !important;
+        transform: scale(0.90) !important;
         background-color: #1a365d !important;
         color: #ffffff !important;
-        border: none !important;
     }
 
-    /* 削除ボタン：数字ボタンと差別化 */
+    /* 修正ボタン */
     div.stButton > button[kind="secondary"] {
         background-color: #f1f5f9 !important;
-        height: 65px !important;
-        font-size: 20px !important;
-        color: #64748b !important;
+        height: 60px !important;
+        font-size: 18px !important;
     }
 
-    /* アプリ一覧リンクボタン */
+    /* ログイン後のリストボタン */
     a[data-testid="stLinkButton"] {
-        width: 100% !important; height: 75px !important;
-        border-radius: 15px !important; font-size: 1.15rem !important;
+        width: 100% !important; height: 70px !important;
+        border-radius: 15px !important; font-size: 1.1rem !important;
         font-weight: bold !important; background-color: #ffffff !important;
         color: #1a365d !important; border: 2px solid #f1f5f9 !important;
         display: flex !important; align-items: center !important; justify-content: center !important;
         text-decoration: none !important; margin-bottom: 15px !important;
-        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1) !important;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# セッション状態の管理
+# セッション状態
 if 'authenticated' not in st.session_state:
     st.session_state['authenticated'] = False
 if 'temp_password' not in st.session_state:
@@ -82,7 +91,7 @@ if 'temp_password' not in st.session_state:
 if not st.session_state['authenticated']:
     st.markdown('<div class="title-text">🔒 営業支援システム</div>', unsafe_allow_html=True)
     
-    # 4桁即時ログイン判定
+    # 即時ログイン判定
     if len(st.session_state['temp_password']) >= 4:
         if st.session_state['temp_password'] == "1234":
             st.session_state['authenticated'] = True
@@ -93,16 +102,16 @@ if not st.session_state['authenticated']:
             st.session_state['temp_password'] = ""
             st.rerun()
 
-    # 入力表示（ラベルなしでスッキリ）
-    st.text_input("pass", value=st.session_state['temp_password'], type="password", label_visibility="collapsed")
+    # 入力表示エリア（高さを出した設定）
+    st.text_input("password_field", value=st.session_state['temp_password'], type="password", label_visibility="collapsed")
 
-    # 厳選された数字ボタン (1-5, 0)
+    # 数字ボタン (1-5, 0)
     for num in ["1", "2", "3", "4", "5", "0"]:
         if st.button(num, key=f"num_{num}"):
             st.session_state['temp_password'] += num
             st.rerun()
 
-    # 削除ボタン
+    # 修正ボタン
     if st.button("⬅︎ 修正", key="del_key", type="secondary"):
         st.session_state['temp_password'] = st.session_state['temp_password'][:-1]
         st.rerun()
