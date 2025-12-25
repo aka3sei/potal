@@ -3,10 +3,9 @@ import streamlit as st
 # 1. ページ設定
 st.set_page_config(page_title="不動産営業支援ポータル", layout="centered")
 
-# CSS: 余計な余白を排除し、中央揃えを絶対化する
+# CSS: 中央揃えと幅広デザインを死守
 st.markdown("""
     <style>
-    /* ヘッダー非表示 */
     header[data-testid="stHeader"] { visibility: hidden; }
     
     /* 1. 全ての親要素を中央寄せにする */
@@ -28,25 +27,26 @@ st.markdown("""
         margin: 0 auto !important;
     }
 
-    /* 4. 【重要】「1」のボタンを幅いっぱい（280px）にし、高さを出す */
+    /* 4. 【幅広ボタン】入力枠と同じ幅（280px）で統一 */
     div.stButton > button {
         width: 100% !important;   /* 親要素280pxに対して100% */
-        height: 80px !important;   /* 押しやすい高さ */
+        height: 70px !important;   /* 押しやすい高さ */
         border-radius: 12px !important;
-        font-size: 32px !important; /* 数字を大きく */
+        font-size: 28px !important;
         font-weight: bold !important;
         background-color: #f0f2f6 !important;
         color: #1a365d !important;
         border: 1px solid #d1d5db !important;
         display: block !important;
-        margin: 0 auto !important;
+        margin: 0 auto 8px auto !important; /* ボタンの下に少し隙間 */
     }
 
-    /* ログインボタンなどの二次的ボタンも幅を統一 */
+    /* 5. ログイン・特殊ボタンも幅を統一（色は少し変える） */
     div.stButton > button[kind="secondary"] {
-        width: 100% !important;
-        height: 50px !important;
-        margin-top: 20px !important;
+        background-color: #e2e8f0 !important;
+        height: 60px !important;
+        font-size: 20px !important;
+        margin-top: 10px !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -64,9 +64,16 @@ if not st.session_state['authenticated']:
     # 中央に配置された280px幅の入力欄
     password = st.text_input("アクセスパスワードを入力", value=st.session_state['temp_password'], type="password")
 
-    # 全く同じ幅で中央に配置される「1」ボタン
-    if st.button("1", key="num_1"):
-        st.session_state['temp_password'] += "1"
+    # 1〜5までの幅広ボタンを順番に配置
+    nums = ["1", "2", "3", "4", "5"]
+    for num in nums:
+        if st.button(num, key=f"num_{num}"):
+            st.session_state['temp_password'] += num
+            st.rerun()
+
+    # 一文字消すボタン
+    if st.button("⬅︎ (一文字消す)", key="del_key", type="secondary"):
+        st.session_state['temp_password'] = st.session_state['temp_password'][:-1]
         st.rerun()
 
     # ログインボタン
