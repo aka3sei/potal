@@ -42,11 +42,10 @@ if not st.session_state['authenticated']:
         else:
             st.error("パスワードが正しくありません")
 else:
-    # 2. アプリリスト（標準のlink_buttonを使用）
+    # 2. アプリリスト
     st.markdown('<div class="main-title">📱 業務アプリ一覧</div>', unsafe_allow_html=True)
     
-    # st.link_buttonは、ブラウザが「同じ画面で開く」か「別タブで開く」かを
-    # 状況に応じて最適に判断してくれます。
+    # 順番を入れ替え：暮らしのスコア → マンション予想 → ローン診断 → 営業進捗
     st.link_button("🏙️ 暮らしの立地スコア診断", "https://bbmns2pc89m86nxhkvqnet.streamlit.app/")
     st.link_button("🏢 マンション予想AI", "https://tokyo-mansion-ai-ds4tk2ddjdvxhdnbdcpghz.streamlit.app/")
     st.link_button("💰 ローン診断", "https://kqhrxuaoh5vmuguuuyfbzg.streamlit.app/")
@@ -54,8 +53,9 @@ else:
 
     st.write("---")
     if st.button("ログアウト", type="secondary"):
-        st.session_state['authenticated'] = False
+        st.session_state.auth = False
         st.rerun()
+
 
 
 
