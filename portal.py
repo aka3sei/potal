@@ -2,7 +2,7 @@ import streamlit as st
 
 st.set_page_config(page_title="不動産営業支援ポータル", layout="centered")
 
-# デザイン設定（CSS）
+# CSS: 四角いボタンとアニメーションの定義
 st.markdown("""
     <style>
     header[data-testid="stHeader"] { visibility: hidden; }
@@ -10,26 +10,29 @@ st.markdown("""
     
     .pass-display { 
         font-size: 40px; text-align: center; letter-spacing: 15px; 
-        color: #1a365d; margin: 15px 0; height: 50px;
+        color: #1a365d; margin: 20px 0; height: 50px;
     }
 
-    /* 【1】テンキーの丸ボタン（type="primary"を指定したボタンのみ） */
+    /* 【1】テンキーの四角いボタン（アニメーション付き） */
     div.stButton > button[kind="primary"] {
-        width: 75px !important; height: 75px !important;
-        border-radius: 50% !important; /* ここで丸くしています */
-        font-size: 26px !important; font-weight: 500 !important;
+        width: 80% !important; height: 60px !important;
+        border-radius: 10px !important; /* 角を少しだけ丸めた四角 */
+        font-size: 24px !important; font-weight: bold !important;
         background-color: #f0f2f6 !important;
         color: #1a365d !important;
-        border: none !important;
-        margin: 0 auto !important;
-        transition: transform 0.1s;
+        border: 1px solid #d1d5db !important;
+        margin: 5px auto !important;
+        transition: transform 0.1s, background-color 0.1s; /* アニメーションの速度 */
     }
+    
+    /* 押した瞬間の反応：少し小さく（沈む）、色を濃く */
     div.stButton > button[kind="primary"]:active {
-        transform: scale(0.85) !important;
+        transform: scale(0.92) !important;
         background-color: #cbd5e0 !important;
+        border-color: #a0aec0 !important;
     }
 
-    /* 【2】アプリのリンクボタン（巨大な長方形） */
+    /* 【2】業務アプリのリンクボタン */
     a[data-testid="stLinkButton"] {
         width: 100% !important; height: 70px !important;
         border-radius: 15px !important; font-size: 1.1rem !important;
@@ -39,13 +42,13 @@ st.markdown("""
         text-decoration: none !important; margin-bottom: 12px !important;
     }
 
-    /* 【3】ログアウトボタン専用（type="secondary"を指定したボタンのみ） */
+    /* 【3】ログアウトボタン：以前のシンプルなスタイル */
     div.stButton > button[kind="secondary"] {
         width: auto !important;
         height: auto !important;
         padding: 5px 15px !important;
         font-size: 14px !important;
-        border-radius: 4px !important; /* 四角いまま */
+        border-radius: 4px !important;
         background-color: #f8fafc !important;
         color: #4a5568 !important;
         border: 1px solid #cbd5e0 !important;
@@ -78,11 +81,11 @@ if not st.session_state['logged_in']:
     display_pass = "●" * len(st.session_state['input_pass'])
     st.markdown(f'<div class="pass-display">{display_pass}</div>', unsafe_allow_html=True)
 
+    # テンキー配列（4行表示を確実にする）
     rows = [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"], ["CLR", "0", "⬅︎"]]
 
     for i, row in enumerate(rows):
-        c1, c2, c3, c4, c5 = st.columns([1, 1, 1, 1, 1])
-        # 全てのテンキーに type="primary" を指定
+        c1, c2, c3, c4, c5 = st.columns([0.5, 1, 1, 1, 0.5]) # 中央3つを使用
         with c2:
             if st.button(row[0], key=f"btn_{i}_0", type="primary"):
                 if row[0] == "CLR": st.session_state['input_pass'] = ""
@@ -99,7 +102,7 @@ if not st.session_state['logged_in']:
                 st.rerun()
 
 else:
-    # ログイン後
+    # ログイン後のリスト画面
     st.markdown('<div class="main-title">📱 業務アプリ一覧</div>', unsafe_allow_html=True)
     
     st.link_button("🏙️ 暮らしの立地スコア診断", "https://bbmns2pc89m86nxhkvqnet.streamlit.app/")
@@ -110,8 +113,6 @@ else:
     st.link_button("📈 営業進捗管理", "https://my-sales-app-aog993sltv8vseasajfwvr.streamlit.app/")
 
     st.write("---")
-    
-    # ログアウトボタンだけ type="secondary" を指定
     if st.button("ログアウト", key="logout_btn", type="secondary"):
         st.session_state['logged_in'] = False
         st.session_state['input_pass'] = ""
