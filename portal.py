@@ -3,41 +3,37 @@ import streamlit as st
 # 1. ページ設定
 st.set_page_config(page_title="不動産営業支援ポータル", layout="centered")
 
-# CSS: 枠のサイズと中央揃えを死守
+# CSS: 横幅280pxで入力欄とボタンを完全に一致させ、中央に固定する
 st.markdown("""
     <style>
     header[data-testid="stHeader"] { visibility: hidden; }
-    .main-title { font-size: 24px; font-weight: bold; text-align: center; color: #1a365d; margin-bottom: 20px; }
     
-    /* 入力欄とボタンの「箱」を280pxに固定して中央寄せを絶対維持 */
-    div[data-testid="column"], 
-    div[data-testid="stVerticalBlock"] > div:has(div[data-testid="stTextInput"]),
-    div[data-testid="stVerticalBlock"] > div:has(button) {
-        max-width: 280px !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
+    /* 1. 【中央揃えと幅の固定】入力欄とボタンを包むエリアを280pxに固定 */
+    .stTextInput, .stButton {
+        width: 280px !important;
+        margin: 0 auto !important;
     }
 
-    /* 入力欄のデザイン */
-    div[data-testid="stTextInput"] {
+    /* 2. 【入力欄】幅100%（＝280px） */
+    div[data-testid="stTextInput"] > div {
         width: 100% !important;
-        margin-bottom: 10px !important;
     }
 
-    /* 【幅広ボタン】入力枠と同じ幅（100%）に固定 */
-    div.stButton > button[kind="primary"] {
-        width: 100% !important;   /* 親要素280pxいっぱいに広げる */
-        height: 65px !important;  /* 高さを出してさらに押しやすく */
+    /* 3. 【巨大ボタン】幅100%（＝280px）で高さを出し、中央に配置 */
+    div.stButton > button {
+        width: 100% !important;  /* 親要素280pxいっぱいに広げる */
+        height: 70px !important; /* ボタンの高さを強調 */
         border-radius: 10px !important;
-        font-size: 28px !important; /* 数字を大きく強調 */
+        font-size: 30px !important; /* 数字を巨大に */
         font-weight: bold !important;
         background-color: #f0f2f6 !important;
         color: #1a365d !important;
         border: 1px solid #d1d5db !important;
-        margin-bottom: 5px !important;
+        display: block !important;
+        margin: 0 auto !important;
     }
 
-    /* ログイン後のリストボタン */
+    /* ログイン後のリストデザイン（崩さないよう維持） */
     a[data-testid="stLinkButton"] {
         width: 100% !important; height: 65px !important;
         border-radius: 12px !important; font-size: 1.1rem !important;
@@ -45,13 +41,6 @@ st.markdown("""
         color: #1a365d !important; border: 2px solid #e2e8f0 !important;
         display: flex !important; align-items: center !important; justify-content: center !important;
         text-decoration: none !important; margin-bottom: 10px !important;
-    }
-
-    /* ログイン・CLR・削除ボタンなどの特殊ボタン */
-    div.stButton > button[kind="secondary"] {
-        width: 100% !important;
-        height: 50px !important;
-        margin-top: 5px !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -64,31 +53,20 @@ if 'temp_password' not in st.session_state:
 
 # --- 1. パスワード認証画面 ---
 if not st.session_state['authenticated']:
-    st.markdown('<div class="main-title">🔒 営業支援システム</div>', unsafe_allow_html=True)
+    st.markdown('<h2 style="text-align:center;">🔒 営業支援システム</h2>', unsafe_allow_html=True)
     
-    # 280px幅の入力欄
+    # 中央に配置された280pxの入力欄
     password = st.text_input("アクセスパスワードを入力", value=st.session_state['temp_password'], type="password")
 
-    # 1〜9, 0 の幅広ボタンを縦に並べる
-    nums = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
-    for num in nums:
-        if st.button(num, key=f"n_{num}", type="primary"):
-            st.session_state['temp_password'] += num
-            st.rerun()
+    # 入力欄と全く同じ幅の「1」ボタン
+    if st.button("1", key="num_1"):
+        st.session_state['temp_password'] += "1"
+        st.rerun()
 
-    # CLR（クリア）と削除を横並びにする場合はここも中央揃えを維持
-    col_sub1, col_sub2 = st.columns(2)
-    with col_sub1:
-        if st.button("CLR", key="clr", type="secondary"):
-            st.session_state['temp_password'] = ""
-            st.rerun()
-    with col_sub2:
-        if st.button("⬅︎", key="del", type="secondary"):
-            st.session_state['temp_password'] = st.session_state['temp_password'][:-1]
-            st.rerun()
-
+    st.write("") 
+    
     # ログインボタン
-    if st.button("ログイン", key="login_exec", type="secondary"):
+    if st.button("ログイン", key="login_exec"):
         if password == "1234":
             st.session_state['authenticated'] = True
             st.rerun()
@@ -98,7 +76,7 @@ if not st.session_state['authenticated']:
 
 # --- 2. 業務アプリ一覧画面 ---
 else:
-    st.markdown('<div class="main-title">📱 業務アプリ一覧</div>', unsafe_allow_html=True)
+    st.markdown('<h2 style="text-align:center;">📱 業務アプリ一覧</h2>', unsafe_allow_html=True)
     st.link_button("🏙️ 暮らしのスコア診断", "https://kqhrxuaoh5vmuguuuyfbzg.streamlit.app/")
     st.link_button("🚉 最寄り駅・周辺検索", "https://moyori-6e5qmrnhwfjieq9wfdtcee.streamlit.app/")
     st.link_button("🏢 マンション予想AI", "https://tokyo-mansion-ai-ds4tk2ddjdvxhdnbdcpghz.streamlit.app/")
