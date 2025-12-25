@@ -3,12 +3,12 @@ import streamlit as st
 # 1. ページ設定
 st.set_page_config(page_title="不動産営業支援ポータル", layout="centered")
 
-# CSS: 入力欄の2重枠を完全に解消し、1重にする
+# CSS: 入力欄の2重枠を消すため、装飾を最小限に。ボタンデザインは維持。
 st.markdown("""
     <style>
     header[data-testid="stHeader"] { visibility: hidden; }
     
-    /* 上部余白を 1.0rem に設定 */
+    /* 上部余白 1.0rem */
     .block-container { padding-top: 1.0rem !important; }
     
     /* コンテンツ幅固定 */
@@ -27,39 +27,18 @@ st.markdown("""
         margin-bottom: 10px !important;
     }
 
-    /* 【再修正】入力欄の2重枠を解消：外側のコンテナの枠をすべて消去 */
-    div[data-testid="stTextInput"] > div {
-        border: none !important;
-        background-color: transparent !important;
-        box-shadow: none !important;
-    }
-    div[data-testid="stTextInput"] div[data-baseweb="input"] {
-        border: none !important;
-        background-color: transparent !important;
-        box-shadow: none !important;
-    }
-
-    /* 内側の実際の入力フィールドだけに枠線を設定 */
+    /* 【再修正】2重枠を消すため、高さを抑えて標準的な1重枠にする */
     div[data-testid="stTextInput"] input {
-        height: 75px !important;
-        font-size: 36px !important;
+        height: 50px !important; /* 少し小さくして安定させる */
+        font-size: 24px !important;
         text-align: center !important;
-        border-radius: 18px !important;
-        background-color: #f1f5f9 !important;
-        /* ここで唯一の枠線を引く */
-        border: 2px solid #cbd5e1 !important;
-        color: #1a365d !important;
-        box-shadow: inset 0 2px 4px rgba(0,0,0,0.05) !important;
-        outline: none !important;
+        border-radius: 8px !important;
+        border: 1px solid #d1d5db !important; /* 標準的な細い1本の線 */
+        background-color: #ffffff !important; /* 背景を白にして透過による重なりを防止 */
+        box-shadow: none !important; /* 影による2重見えを防止 */
     }
 
-    /* フォーカス時（クリック時）も枠が増えないように固定 */
-    div[data-testid="stTextInput"] input:focus {
-        border: 2px solid #cbd5e1 !important;
-        box-shadow: inset 0 2px 4px rgba(0,0,0,0.05) !important;
-    }
-
-    /* 数字ボタン：1〜5（変更なし） */
+    /* 数字ボタン：1〜5（デザイン維持） */
     div.stButton > button {
         width: 100% !important;
         height: 75px !important; 
@@ -112,8 +91,8 @@ if not st.session_state['authenticated']:
             st.session_state['temp_password'] = ""
             st.rerun()
 
-    # 入力表示エリア
-    st.text_input("pass_input", value=st.session_state['temp_password'], type="password", label_visibility="collapsed")
+    # 入力表示エリア（labelなし）
+    st.text_input("pw_input", value=st.session_state['temp_password'], type="password", label_visibility="collapsed")
 
     # 1〜5までのボタン
     for num in ["1", "2", "3", "4", "5"]:
