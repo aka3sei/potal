@@ -3,19 +3,28 @@ import streamlit as st
 # 1. ページ設定
 st.set_page_config(page_title="不動産営業支援ポータル", layout="centered")
 
-# CSS: コンテンツ配置と数字ボタンのデザインのみ。入力欄の装飾は一切なし。
+# CSS: 入力欄の「横幅」だけをボタンに合わせ、装飾は一切なし
 st.markdown("""
     <style>
     header[data-testid="stHeader"] { visibility: hidden; }
     
-    /* 上部余白 1.5rem */
-    .block-container { padding-top: 1.5rem !important; }
+    /* 上部余白 1.0rem */
+    .block-container { padding-top: 1.0rem !important; }
     
-    /* コンテンツ幅固定（ボタンと揃えるため） */
+    /* コンテンツ幅を280pxで中央固定 */
     [data-testid="stVerticalBlock"] > div {
         width: 280px !important;
         margin-left: auto !important;
         margin-right: auto !important;
+    }
+
+    /* 【修正】入力表示枠の「横幅」をボタンの幅(100%)に広げる */
+    /* 飾り（色・枠・高さ）は一切触れず、幅だけを強制一致させます */
+    div[data-testid="stTextInput"] {
+        width: 100% !important;
+    }
+    div[data-testid="stTextInput"] > div {
+        width: 100% !important;
     }
 
     /* タイトル */
@@ -27,7 +36,7 @@ st.markdown("""
         margin-bottom: 20px !important;
     }
 
-    /* 数字ボタンのデザイン（維持） */
+    /* 数字ボタンのデザイン（現状維持） */
     div.stButton > button {
         width: 100% !important;
         height: 75px !important; 
@@ -80,7 +89,7 @@ if not st.session_state['authenticated']:
             st.session_state['temp_password'] = ""
             st.rerun()
 
-    # 装飾なしの標準入力枠
+    # 装飾なし、幅だけボタンと揃えた入力枠
     st.text_input("pass", value=st.session_state['temp_password'], type="password", label_visibility="collapsed")
 
     # 1〜5のボタン
@@ -108,5 +117,3 @@ else:
     if st.button("ログアウト", key="logout_btn", type="secondary"):
         st.session_state['authenticated'] = False
         st.rerun()
-
-
