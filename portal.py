@@ -2,39 +2,40 @@ import streamlit as st
 
 st.set_page_config(page_title="不動産営業支援ポータル", layout="centered")
 
-# CSS: 限界まで横幅を詰め、強制的に3列を維持する
+# CSS: ボタンをさらに小さくし、3列を絶対死守する
 st.markdown("""
     <style>
     header[data-testid="stHeader"] { visibility: hidden; }
     .block-container { padding: 1rem 0.5rem !important; }
 
-    /* 1. タイトルとパス表示 */
+    /* 1. タイトル周りをコンパクトに */
     .main-title { font-size: 18px; font-weight: bold; text-align: center; color: #1a365d; margin-bottom: 0px; }
-    .pass-display { font-size: 30px; text-align: center; letter-spacing: 10px; color: #1a365d; height: 40px; margin-top: 5px; }
+    .pass-display { font-size: 28px; text-align: center; letter-spacing: 8px; color: #1a365d; height: 35px; margin: 5px 0; }
 
-    /* 2. 【最重要】横幅をさらに230pxまで絞り、絶対に3列にする */
+    /* 2. 【究極修正】横幅を210pxまで絞り、隙間も最小(2px)に */
     [data-testid="stHorizontalBlock"] {
         display: flex !important;
         flex-direction: row !important;
         flex-wrap: nowrap !important;
         justify-content: center !important;
-        gap: 4px !important;            /* 隙間を極限まで狭く(4px) */
+        gap: 2px !important;            /* 隙間をほぼゼロに */
         width: 100% !important;
-        max-width: 230px !important;    /* 250pxから230pxへさらに縮小 */
+        max-width: 210px !important;    /* 230pxからさらに絞り込み */
         margin: 0 auto 4px auto !important;
     }
     
     [data-testid="column"] {
         flex: 1 !important;
         min-width: 0 !important;
+        padding: 0 !important;         /* カラム自体の余白を消去 */
     }
 
-    /* 3. ボタン：スリム化と中央配置 */
+    /* 3. ボタン：さらに小さく、スリムに */
     div.stButton > button[kind="primary"] {
         width: 100% !important;
-        height: 50px !important;         /* 高さを固定してスリムに */
-        border-radius: 8px !important;
-        font-size: 18px !important;      /* 数字も少し小さく */
+        height: 45px !important;         /* 高さをさらに抑える */
+        border-radius: 6px !important;
+        font-size: 16px !important;      /* 数字も小さめに */
         font-weight: bold !important;
         background-color: #f0f2f6 !important;
         color: #1a365d !important;
@@ -43,22 +44,24 @@ st.markdown("""
         align-items: center !important;
         justify-content: center !important;
         padding: 0 !important;
+        min-width: 0 !important;
     }
 
-    /* 文字の位置を微調整 */
-    div.stButton > button[kind="primary"] p {
+    /* 数字のズレを徹底修正 */
+    div.stButton > button[kind="primary"] div p {
         margin: 0 !important;
         line-height: 1 !important;
     }
     
     /* 押し込んだ時の動き */
     div.stButton > button[kind="primary"]:active {
-        transform: scale(0.92) !important;
+        transform: scale(0.9) !important;
     }
 
-    /* ログアウトボタン */
+    /* ログアウトボタン（影響を受けないよう隔離） */
     div.stButton > button[kind="secondary"] {
         width: auto !important;
+        height: auto !important;
         padding: 2px 8px !important;
         font-size: 11px !important;
         margin-left: auto !important;
@@ -72,10 +75,11 @@ if 'input_pass' not in st.session_state:
 if 'logged_in' not in st.session_state:
     st.session_state['logged_in'] = False
 
+# パスコード入力画面
 if not st.session_state['logged_in']:
     st.markdown('<div class="main-title">パスコードを入力</div>', unsafe_allow_html=True)
     
-    # 判定
+    # 4文字で自動判定
     if len(st.session_state['input_pass']) == 4:
         if st.session_state['input_pass'] == "1234":
             st.session_state['logged_in'] = True
@@ -89,11 +93,11 @@ if not st.session_state['logged_in']:
     display_dots = "●" * len(st.session_state['input_pass'])
     st.markdown(f'<div class="pass-display">{display_dots}</div>', unsafe_allow_html=True)
 
+    # 行ごとに作成（3列を強制）
     def create_row(keys):
         cols = st.columns(3)
         for i, key in enumerate(keys):
             with cols[i]:
-                # すべてに type="primary" を指定して一貫性を持たせる
                 if st.button(key, key=f"btn_{key}", type="primary"):
                     if key == "CLR": st.session_state['input_pass'] = ""
                     elif key == "⬅︎": st.session_state['input_pass'] = st.session_state['input_pass'][:-1]
@@ -106,12 +110,13 @@ if not st.session_state['logged_in']:
     create_row(["CLR", "0", "⬅︎"])
 
 else:
-    # ログイン後画面
+    # ログイン後のメイン画面
     st.markdown('<h3 style="text-align:center;">📱 業務アプリ一覧</h3>', unsafe_allow_html=True)
     st.link_button("🏙️ 暮らしの立地スコア診断", "https://bbmns2pc89m86nxhkvqnet.streamlit.app/", use_container_width=True)
     st.link_button("🚉 最寄り駅・周辺検索", "https://moyori-6e5qmrnhwfjieq9wfdtcee.streamlit.app/", use_container_width=True)
     
     st.write("---")
+    # ログアウトボタン（以前のスタイルを維持）
     if st.button("ログアウト", key="logout_btn", type="secondary"):
         st.session_state['logged_in'] = False
         st.rerun()
