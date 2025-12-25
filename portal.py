@@ -3,7 +3,7 @@ import streamlit as st
 # 1. ページ設定
 st.set_page_config(page_title="不動産営業支援ポータル", layout="centered")
 
-# CSS: 入力欄の周りの不可視な余白を強制削除
+# CSS: 入力欄の2重枠解消のみに集中
 st.markdown("""
     <style>
     header[data-testid="stHeader"] { visibility: hidden; }
@@ -25,26 +25,29 @@ st.markdown("""
         margin-bottom: 10px !important;
     }
 
-    /* 【再修正】入力欄：Streamlit特有の上下余白をリセット */
-    div[data-testid="stTextInput"] {
-        padding: 0px !important;
-        margin-bottom: 25px !important;
-    }
+    /* 【ここを修正】入力欄の2重枠を解消 */
+    /* 1. 外側の枠線を完全に消す */
     div[data-testid="stTextInput"] > div {
-        padding: 0px !important;
+        border: none !important;
+        background-color: transparent !important;
+        box-shadow: none !important;
+        padding: 0 !important;
     }
+    
+    /* 2. 内側の入力エリアのみにボタンと合わせたデザインを適用 */
     div[data-testid="stTextInput"] input {
-        height: 75px !important; /* ボタンと同じ高さ */
+        height: 75px !important;
         font-size: 36px !important;
         text-align: center !important;
         border-radius: 18px !important;
         background-color: #f1f5f9 !important;
-        border: 2px solid #cbd5e1 !important;
+        border: 2px solid #cbd5e1 !important; /* ここが唯一の枠線になります */
         color: #1a365d !important;
         box-shadow: inset 0 2px 4px rgba(0,0,0,0.05) !important;
+        outline: none !important;
     }
 
-    /* 数字ボタン：1〜5のみ */
+    /* --- 以下、変更なし --- */
     div.stButton > button {
         width: 100% !important;
         height: 75px !important; 
@@ -60,14 +63,12 @@ st.markdown("""
         box-shadow: 0 4px 6px -1px rgba(0,0,0,0.08) !important;
     }
 
-    /* 押し込みアニメーション */
     div.stButton > button:active {
         transform: scale(0.92) !important;
         background-color: #1a365d !important;
         color: #ffffff !important;
     }
 
-    /* 削除ボタン */
     div.stButton > button[kind="secondary"] {
         background-color: #f1f5f9 !important;
         height: 60px !important;
@@ -86,7 +87,6 @@ if 'temp_password' not in st.session_state:
 if not st.session_state['authenticated']:
     st.markdown('<div class="title-text">🔒 営業支援システム</div>', unsafe_allow_html=True)
     
-    # 4桁即時ログイン
     if len(st.session_state['temp_password']) >= 4:
         if st.session_state['temp_password'] == "1234":
             st.session_state['authenticated'] = True
@@ -97,16 +97,13 @@ if not st.session_state['authenticated']:
             st.session_state['temp_password'] = ""
             st.rerun()
 
-    # 入力表示エリア
     st.text_input("pass_input", value=st.session_state['temp_password'], type="password", label_visibility="collapsed")
 
-    # 1〜5までのボタン
     for num in ["1", "2", "3", "4", "5"]:
         if st.button(num, key=f"num_{num}"):
             st.session_state['temp_password'] += num
             st.rerun()
 
-    # 削除ボタン
     if st.button("⬅︎ 一文字削除", key="del_key", type="secondary"):
         st.session_state['temp_password'] = st.session_state['temp_password'][:-1]
         st.rerun()
