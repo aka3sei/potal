@@ -3,26 +3,29 @@ import streamlit as st
 # 1. ページ設定
 st.set_page_config(page_title="不動産営業支援ポータル", layout="centered")
 
-# CSS: 入力枠とボタンのサイズを完全に一致させる
+# CSS: 枠のサイズと中央寄せを強制
 st.markdown("""
     <style>
     header[data-testid="stHeader"] { visibility: hidden; }
     .main-title { font-size: 24px; font-weight: bold; text-align: center; color: #1a365d; margin-bottom: 20px; }
     
-    /* 入力欄とボタンの横幅を280pxに固定して中央寄せ */
-    div[data-testid="stTextInput"], div.stButton {
-        max-width: 280px;
-        margin: 0 auto !important;
+    /* 入力欄とボタンを包む「親要素」を280pxにして中央に置く */
+    [data-testid="stVerticalBlock"] > div:has(div[data-testid="stTextInput"]),
+    [data-testid="stVerticalBlock"] > div:has(button) {
+        max-width: 280px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
     }
 
-    /* 入力欄の下の余白を調整 */
+    /* 入力欄のデザイン */
     div[data-testid="stTextInput"] {
+        width: 100% !important;
         margin-bottom: 15px !important;
     }
 
-    /* ボタンのデザイン：入力枠と同じ幅・丸み・高さを設定 */
-    div.stButton > button[kind="primary"] {
-        width: 100% !important;   /* 親要素（280px）に対して100% */
+    /* ボタンのデザイン：入力枠と同じ幅（100%）に強制 */
+    div.stButton > button {
+        width: 100% !important;   /* これで親要素の280pxいっぱいに広がる */
         height: 60px !important;
         border-radius: 8px !important;
         font-size: 24px !important;
@@ -32,7 +35,13 @@ st.markdown("""
         border: 1px solid #d1d5db !important;
     }
 
-    /* ログイン後のリストボタン */
+    /* ボタン内の数字の位置微調整 */
+    div.stButton > button p {
+        margin: 0 !important;
+        line-height: 1 !important;
+    }
+
+    /* アプリ一覧ボタン（ログイン後） */
     a[data-testid="stLinkButton"] {
         width: 100% !important; height: 65px !important;
         border-radius: 12px !important; font-size: 1.1rem !important;
@@ -54,18 +63,18 @@ if 'temp_password' not in st.session_state:
 if not st.session_state['authenticated']:
     st.markdown('<div class="main-title">🔒 営業支援システム</div>', unsafe_allow_html=True)
     
-    # 入力欄
+    # 280pxに固定された入力欄
     password = st.text_input("アクセスパスワードを入力", value=st.session_state['temp_password'], type="password")
 
-    # 入力欄と全く同じサイズの「1」ボタン
-    if st.button("1", key="num_1", type="primary"):
+    # 全く同じ280px幅の「1」ボタン
+    if st.button("1", key="num_1"):
         st.session_state['temp_password'] += "1"
         st.rerun()
 
-    st.write("") # スペース
+    st.write("") 
     
-    # ログイン実行ボタン
-    if st.button("ログイン", type="secondary"):
+    # ログインボタン
+    if st.button("ログイン"):
         if password == "1234":
             st.session_state['authenticated'] = True
             st.rerun()
@@ -83,7 +92,7 @@ else:
     st.link_button("💰 ローン診断", "https://kqhrxuaoh5vmuguuuyfbzg.streamlit.app/")
 
     st.write("---")
-    if st.button("ログアウト", type="secondary"):
+    if st.button("ログアウト"):
         st.session_state['authenticated'] = False
         st.session_state['temp_password'] = ""
         st.rerun()
