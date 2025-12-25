@@ -3,32 +3,33 @@ import streamlit as st
 # 1. ページ設定
 st.set_page_config(page_title="不動産営業支援ポータル", layout="centered")
 
-# CSS: デザインをアプリ風に整える
+# CSS: スマホの縦並びを禁止し、ボタンを巨大化する
 st.markdown("""
     <style>
     header[data-testid="stHeader"] { visibility: hidden; }
     .main-title { font-size: 24px; font-weight: bold; text-align: center; color: #1a365d; margin-bottom: 20px; }
     
-    /* 入力欄の中央寄せ */
-    div[data-testid="stTextInput"] { max-width: 300px; margin: 0 auto !important; }
+    /* 1. 入力欄を中央に寄せる */
+    div[data-testid="stTextInput"] { max-width: 280px; margin: 0 auto !important; }
 
-    /* 2列テンキーのレイアウト設定 */
+    /* 2. 【最重要】スマホでも絶対に縦に並べない設定 (2列固定) */
     [data-testid="stHorizontalBlock"] {
         display: flex !important;
-        flex-direction: row !important;
+        flex-direction: row !important; /* 強制横並び */
+        flex-wrap: nowrap !important;   /* 折り返し禁止 */
         justify-content: center !important;
-        gap: 10px !important;
-        max-width: 300px !important;
+        gap: 10px !important;           /* ボタン間の隙間 */
+        max-width: 280px !important;    /* 枠からはみ出さない幅 */
         margin: 10px auto !important;
     }
     [data-testid="column"] { flex: 1 !important; min-width: 0 !important; }
 
-    /* 数字ボタンのデザイン */
+    /* 3. 巨大数字ボタンのデザイン */
     div.stButton > button[kind="primary"] {
         width: 100% !important;
-        height: 60px !important;
+        height: 70px !important;        /* スマホで押しやすい高さ */
         border-radius: 12px !important;
-        font-size: 24px !important;
+        font-size: 28px !important;     /* 数字を大きく */
         font-weight: bold !important;
         background-color: #f0f2f6 !important;
         color: #1a365d !important;
@@ -43,7 +44,6 @@ st.markdown("""
         color: #1a365d !important; border: 2px solid #e2e8f0 !important;
         display: flex !important; align-items: center !important; justify-content: center !important;
         text-decoration: none !important; margin-bottom: 12px !important;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.05) !important;
     }
 
     /* ログイン・ログアウトボタン */
@@ -63,14 +63,14 @@ if 'temp_password' not in st.session_state:
 if not st.session_state['authenticated']:
     st.markdown('<div class="main-title">🔒 営業支援システム</div>', unsafe_allow_html=True)
     
-    # テキスト入力欄（ボタンを押すとここに反映される）
+    # テキスト入力欄
     password = st.text_input("アクセスパスワードを入力", value=st.session_state['temp_password'], type="password")
 
-    # テンキーの配置（2列）
+    # テンキー配置（2列ずつ確実に配置）
     rows = [["1", "2"], ["3", "4"], ["5", "6"], ["7", "8"], ["9", "0"], ["CLR", "⬅︎"]]
     
     for row in rows:
-        cols = st.columns(2)
+        cols = st.columns(2) # ここで2列の枠を作る
         for i, val in enumerate(row):
             with cols[i]:
                 if st.button(val, key=f"key_{val}", type="primary"):
@@ -82,7 +82,7 @@ if not st.session_state['authenticated']:
                         st.session_state['temp_password'] += val
                     st.rerun()
 
-    # ログイン実行ボタン
+    # ログインボタン
     if st.button("ログイン", type="secondary"):
         if password == "1234":
             st.session_state['authenticated'] = True
