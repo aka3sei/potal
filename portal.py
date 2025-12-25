@@ -3,7 +3,7 @@ import streamlit as st
 # 1. ページ設定
 st.set_page_config(page_title="不動産営業支援ポータル", layout="centered")
 
-# CSS: 入力欄の2重枠解消のみに集中
+# CSS: 入力枠を「1つの枠」に絞る
 st.markdown("""
     <style>
     header[data-testid="stHeader"] { visibility: hidden; }
@@ -25,26 +25,31 @@ st.markdown("""
         margin-bottom: 10px !important;
     }
 
-    /* 【ここを修正】入力欄の2重枠を解消 */
-    /* 1. 外側の枠線を完全に消す */
-    div[data-testid="stTextInput"] > div {
+    /* 【ここが最重要：入力欄の2重枠を完全に消し去る】 */
+    /* 外枠（コンテナ）の線をすべて透明化 */
+    div[data-testid="stTextInput"] div[data-baseweb="input"] {
         border: none !important;
         background-color: transparent !important;
         box-shadow: none !important;
-        padding: 0 !important;
     }
     
-    /* 2. 内側の入力エリアのみにボタンと合わせたデザインを適用 */
+    /* 入力エリア（実際のテキスト部分）のみに枠線を引く */
     div[data-testid="stTextInput"] input {
         height: 75px !important;
         font-size: 36px !important;
         text-align: center !important;
         border-radius: 18px !important;
         background-color: #f1f5f9 !important;
-        border: 2px solid #cbd5e1 !important; /* ここが唯一の枠線になります */
+        border: 2px solid #cbd5e1 !important; /* これが唯一の枠線 */
         color: #1a365d !important;
         box-shadow: inset 0 2px 4px rgba(0,0,0,0.05) !important;
         outline: none !important;
+    }
+
+    /* フォーカス時（クリック時）も枠が勝手に増えないように固定 */
+    div[data-testid="stTextInput"] input:focus {
+        border: 2px solid #cbd5e1 !important;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.05) !important;
     }
 
     /* --- 以下、変更なし --- */
@@ -97,7 +102,8 @@ if not st.session_state['authenticated']:
             st.session_state['temp_password'] = ""
             st.rerun()
 
-    st.text_input("pass_input", value=st.session_state['temp_password'], type="password", label_visibility="collapsed")
+    # ラベルを完全に消して入力エリアのみ表示
+    st.text_input("pw_box", value=st.session_state['temp_password'], type="password", label_visibility="collapsed")
 
     for num in ["1", "2", "3", "4", "5"]:
         if st.button(num, key=f"num_{num}"):
