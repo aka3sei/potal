@@ -3,56 +3,27 @@ import streamlit as st
 # 1. ページ設定
 st.set_page_config(page_title="不動産営業支援ポータル", layout="centered")
 
-# CSS: 入力枠を「1つの枠」に絞る
+# CSS: ボタンデザインと中央揃えのみを適用（入力欄は極力いじらない）
 st.markdown("""
     <style>
     header[data-testid="stHeader"] { visibility: hidden; }
-    .block-container { padding-top: 1.5rem !important; }
     
-    /* コンテンツ幅固定 */
+    /* 中央揃えの設定 */
     [data-testid="stVerticalBlock"] > div {
         width: 280px !important;
         margin-left: auto !important;
         margin-right: auto !important;
     }
 
-    /* タイトルの余白 */
     .title-text {
         font-size: 22px;
         font-weight: bold;
         text-align: center;
         color: #1a365d;
-        margin-bottom: 10px !important;
+        margin-bottom: 20px !important;
     }
 
-    /* 【ここが最重要：入力欄の2重枠を完全に消し去る】 */
-    /* 外枠（コンテナ）の線をすべて透明化 */
-    div[data-testid="stTextInput"] div[data-baseweb="input"] {
-        border: none !important;
-        background-color: transparent !important;
-        box-shadow: none !important;
-    }
-    
-    /* 入力エリア（実際のテキスト部分）のみに枠線を引く */
-    div[data-testid="stTextInput"] input {
-        height: 75px !important;
-        font-size: 36px !important;
-        text-align: center !important;
-        border-radius: 18px !important;
-        background-color: #f1f5f9 !important;
-        border: 2px solid #cbd5e1 !important; /* これが唯一の枠線 */
-        color: #1a365d !important;
-        box-shadow: inset 0 2px 4px rgba(0,0,0,0.05) !important;
-        outline: none !important;
-    }
-
-    /* フォーカス時（クリック時）も枠が勝手に増えないように固定 */
-    div[data-testid="stTextInput"] input:focus {
-        border: 2px solid #cbd5e1 !important;
-        box-shadow: inset 0 2px 4px rgba(0,0,0,0.05) !important;
-    }
-
-    /* --- 以下、変更なし --- */
+    /* 数字ボタンのデザイン（これまでの完璧な状態を維持） */
     div.stButton > button {
         width: 100% !important;
         height: 75px !important; 
@@ -68,12 +39,14 @@ st.markdown("""
         box-shadow: 0 4px 6px -1px rgba(0,0,0,0.08) !important;
     }
 
+    /* 押し込みアニメーション */
     div.stButton > button:active {
         transform: scale(0.92) !important;
         background-color: #1a365d !important;
         color: #ffffff !important;
     }
 
+    /* 修正ボタン */
     div.stButton > button[kind="secondary"] {
         background-color: #f1f5f9 !important;
         height: 60px !important;
@@ -92,6 +65,7 @@ if 'temp_password' not in st.session_state:
 if not st.session_state['authenticated']:
     st.markdown('<div class="title-text">🔒 営業支援システム</div>', unsafe_allow_html=True)
     
+    # 4桁即時ログイン
     if len(st.session_state['temp_password']) >= 4:
         if st.session_state['temp_password'] == "1234":
             st.session_state['authenticated'] = True
@@ -102,14 +76,16 @@ if not st.session_state['authenticated']:
             st.session_state['temp_password'] = ""
             st.rerun()
 
-    # ラベルを完全に消して入力エリアのみ表示
-    st.text_input("pw_box", value=st.session_state['temp_password'], type="password", label_visibility="collapsed")
+    # 初期状態の入力欄（ラベルのみ非表示）
+    st.text_input("パスワード入力", value=st.session_state['temp_password'], type="password", label_visibility="collapsed")
 
+    # 1〜5までのボタン
     for num in ["1", "2", "3", "4", "5"]:
         if st.button(num, key=f"num_{num}"):
             st.session_state['temp_password'] += num
             st.rerun()
 
+    # 削除ボタン
     if st.button("⬅︎ 一文字削除", key="del_key", type="secondary"):
         st.session_state['temp_password'] = st.session_state['temp_password'][:-1]
         st.rerun()
