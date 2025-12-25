@@ -3,7 +3,7 @@ import streamlit as st
 # 1. ページ設定
 st.set_page_config(page_title="不動産営業支援ポータル", layout="centered")
 
-# CSS: 入力欄の2重枠を消すため、装飾を最小限に。ボタンデザインは維持。
+# CSS: ボタンデザインと中央揃えのみ。入力欄のCSSはすべて削除しました。
 st.markdown("""
     <style>
     header[data-testid="stHeader"] { visibility: hidden; }
@@ -11,7 +11,7 @@ st.markdown("""
     /* 上部余白 1.0rem */
     .block-container { padding-top: 1.0rem !important; }
     
-    /* コンテンツ幅固定 */
+    /* コンテンツ幅を280pxで中央固定 */
     [data-testid="stVerticalBlock"] > div {
         width: 280px !important;
         margin-left: auto !important;
@@ -24,21 +24,10 @@ st.markdown("""
         font-weight: bold;
         text-align: center;
         color: #1a365d;
-        margin-bottom: 10px !important;
+        margin-bottom: 20px !important;
     }
 
-    /* 【再修正】2重枠を消すため、高さを抑えて標準的な1重枠にする */
-    div[data-testid="stTextInput"] input {
-        height: 50px !important; /* 少し小さくして安定させる */
-        font-size: 24px !important;
-        text-align: center !important;
-        border-radius: 8px !important;
-        border: 1px solid #d1d5db !important; /* 標準的な細い1本の線 */
-        background-color: #ffffff !important; /* 背景を白にして透過による重なりを防止 */
-        box-shadow: none !important; /* 影による2重見えを防止 */
-    }
-
-    /* 数字ボタン：1〜5（デザイン維持） */
+    /* 数字ボタンのデザイン（これまでの完璧な状態を維持） */
     div.stButton > button {
         width: 100% !important;
         height: 75px !important; 
@@ -91,8 +80,8 @@ if not st.session_state['authenticated']:
             st.session_state['temp_password'] = ""
             st.rerun()
 
-    # 入力表示エリア（labelなし）
-    st.text_input("pw_input", value=st.session_state['temp_password'], type="password", label_visibility="collapsed")
+    # 初期状態の入力枠（ラベルだけ隠して標準のまま表示）
+    st.text_input("pass", value=st.session_state['temp_password'], type="password", label_visibility="collapsed")
 
     # 1〜5までのボタン
     for num in ["1", "2", "3", "4", "5"]:
