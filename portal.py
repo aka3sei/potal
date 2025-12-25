@@ -54,6 +54,7 @@ else:
     st.markdown('<div class="main-title">📱 業務アプリ一覧</div>', unsafe_allow_html=True)
     
     st.link_button("🏙️ 暮らしの立地スコア診断", "https://bbmns2pc89m86nxhkvqnet.streamlit.app/")
+    st.link_button("🚉 最寄り駅・周辺検索", "https://moyori-6e5qmrnhwfjieq9wfdtcee.streamlit.app/")
     st.link_button("🏢 マンション予想AI", "https://tokyo-mansion-ai-ds4tk2ddjdvxhdnbdcpghz.streamlit.app/")
     st.link_button("🛠️ 内装リフォーム見積", "https://reform-xblfcovcvgk83yhwkypqbu.streamlit.app/")
     st.link_button("💰 ローン診断", "https://kqhrxuaoh5vmuguuuyfbzg.streamlit.app/")
@@ -66,4 +67,5 @@ else:
         st.session_state['logged_in'] = False
         # セッション内の他の情報をクリアして確実にロック画面へ
         st.rerun()
+
 
