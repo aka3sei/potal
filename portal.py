@@ -3,7 +3,7 @@ import streamlit as st
 # 1. ページ設定
 st.set_page_config(page_title="不動産営業支援ポータル", layout="centered")
 
-# CSS: 装飾はせず、入力欄の「横幅」だけをボタンより少し広く調整
+# CSS: 装飾はせず、位置関係（横幅と下の余白）のみを調整
 st.markdown("""
     <style>
     header[data-testid="stHeader"] { visibility: hidden; }
@@ -18,10 +18,12 @@ st.markdown("""
         margin-right: auto !important;
     }
 
-    /* 【修正】入力表示枠の横幅をボタン(280px)より少し広く(320px)設定 */
+    /* 入力表示枠の横幅設定 */
     div[data-testid="stTextInput"] {
-        width: 320px !important; /* ボタンより左右に20pxずつ広く */
-        margin-left: -20px !important; /* 中央を維持するためのオフセット */
+        width: 320px !important; 
+        margin-left: -20px !important;
+        /* 【修正】入力欄と数字1の間の余白を広げる（1と2の隙間感に合わせる） */
+        margin-bottom: 25px !important; 
     }
 
     /* タイトル */
@@ -56,7 +58,7 @@ st.markdown("""
         color: #ffffff !important;
     }
 
-    /* 修正ボタン */
+    /* 削除ボタン */
     div.stButton > button[kind="secondary"] {
         background-color: #f1f5f9 !important;
         height: 60px !important;
@@ -86,7 +88,7 @@ if not st.session_state['authenticated']:
             st.session_state['temp_password'] = ""
             st.rerun()
 
-    # 装飾なし、幅だけ少し広げた入力枠
+    # 装飾なし、幅を広げ、下に余白を持たせた入力枠
     st.text_input("pass", value=st.session_state['temp_password'], type="password", label_visibility="collapsed")
 
     # 1〜5のボタン
