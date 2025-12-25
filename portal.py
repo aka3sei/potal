@@ -13,8 +13,8 @@ st.markdown("""
         color: #1a365d; margin: 15px 0; height: 50px;
     }
 
-    /* テンキーボタン（丸） */
-    div.stButton > button:not(.logout-target) {
+    /* 【1】テンキーの丸ボタン（ログイン前） */
+    div.stButton > button:not([kind="secondary"]) {
         width: 70px !important; height: 70px !important;
         border-radius: 50% !important;
         font-size: 24px !important; font-weight: 500 !important;
@@ -24,12 +24,11 @@ st.markdown("""
         margin: 0 auto !important;
         transition: transform 0.1s;
     }
-    div.stButton > button:not(.logout-target):active {
+    div.stButton > button:not([kind="secondary"]):active {
         transform: scale(0.85) !important;
-        background-color: #cbd5e0 !important;
     }
 
-    /* 業務アプリのリンクボタン（巨大な長方形） */
+    /* 【2】アプリのリンクボタン（巨大な長方形） */
     a[data-testid="stLinkButton"] {
         width: 100% !important; height: 70px !important;
         border-radius: 15px !important; font-size: 1.1rem !important;
@@ -39,19 +38,19 @@ st.markdown("""
         text-decoration: none !important; margin-bottom: 12px !important;
     }
 
-    /* ★ログアウトボタン専用：以前のシンプルなスタイルを強制適用★ */
-    .stButton.logout-target > button {
+    /* 【3】ログアウトボタン専用：以前のシンプルなスタイルにリセット */
+    /* st.button(type="secondary") を狙い撃ちします */
+    div.stButton > button[kind="secondary"] {
         width: auto !important;
         height: auto !important;
-        padding: 4px 16px !important;
+        padding: 5px 15px !important;
         font-size: 14px !important;
-        font-weight: normal !important;
         border-radius: 4px !important;
-        background-color: transparent !important;
-        color: #666 !important;
-        border: 1px solid #ccc !important;
-        margin-top: 20px !important;
-        display: inline-block !important;
+        background-color: #f8fafc !important;
+        color: #4a5568 !important;
+        border: 1px solid #cbd5e0 !important;
+        display: block !important;
+        margin-left: auto !important; /* 右寄せ */
     }
     </style>
 """, unsafe_allow_html=True)
@@ -64,7 +63,6 @@ if 'input_pass' not in st.session_state:
 
 # --- 画面分岐 ---
 if not st.session_state['logged_in']:
-    # 【パスコード画面】
     st.markdown('<div class="main-title">パスコードを入力</div>', unsafe_allow_html=True)
     
     if len(st.session_state['input_pass']) == 4:
@@ -80,6 +78,7 @@ if not st.session_state['logged_in']:
     display_pass = "●" * len(st.session_state['input_pass'])
     st.markdown(f'<div class="pass-display">{display_pass}</div>', unsafe_allow_html=True)
 
+    # テンキー配列
     rows = [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"], ["CLR", "0", "⬅︎"]]
 
     for i, row in enumerate(rows):
@@ -100,7 +99,7 @@ if not st.session_state['logged_in']:
                 st.rerun()
 
 else:
-    # 【ログイン後のリスト画面】
+    # ログイン後
     st.markdown('<div class="main-title">📱 業務アプリ一覧</div>', unsafe_allow_html=True)
     
     st.link_button("🏙️ 暮らしの立地スコア診断", "https://bbmns2pc89m86nxhkvqnet.streamlit.app/")
@@ -112,10 +111,8 @@ else:
 
     st.write("---")
     
-    # ここでログアウトボタンに専用の「目印（logout-target）」をつけて以前の姿に戻します
-    st.markdown('<div class="logout-target">', unsafe_allow_html=True)
-    if st.button("ログアウト", key="logout_btn", type="secondary"):
+    # 【修正箇所】ログアウトボタンを右下に、以前の形式で表示
+    if st.button("ログアウト", type="secondary"):
         st.session_state['logged_in'] = False
         st.session_state['input_pass'] = ""
         st.rerun()
-    st.markdown('</div>', unsafe_allow_html=True)
