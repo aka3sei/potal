@@ -3,39 +3,36 @@ import streamlit as st
 # 1. ページ設定
 st.set_page_config(page_title="不動産営業支援ポータル", layout="centered")
 
-# CSS: ワイドボタンと中央揃えを死守
+# CSS: 階層を無視して強制的に中央へ寄せる
 st.markdown("""
     <style>
     header[data-testid="stHeader"] { visibility: hidden; }
     
-    /* 全体を包むメイン容器を中央に固定 */
-    .block-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+    /* 1. 全てのブロックを強制的に中央へ */
+    div[data-testid="stVerticalBlock"] > div {
+        width: 100% !important;
+        display: flex !important;
+        justify-content: center !important;
     }
 
-    /* 入力欄と2列ボタン全体の幅を280pxに統一して中央寄せ */
-    [data-testid="stTextInput"], 
-    [data-testid="stHorizontalBlock"] {
+    /* 2. 入力欄と2列ボタンのコンテナ幅を280pxに固定 */
+    div[data-testid="stTextInput"], 
+    div[data-testid="stHorizontalBlock"] {
         width: 280px !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
+        flex-shrink: 0 !important;
     }
 
-    /* 2列並びでも絶対に縦に崩さない設定 */
-    [data-testid="stHorizontalBlock"] {
+    /* 3. 2列並びを維持 */
+    div[data-testid="stHorizontalBlock"] {
         display: flex !important;
         flex-direction: row !important;
-        flex-wrap: nowrap !important;
         gap: 10px !important;
     }
-    [data-testid="column"] {
+    div[data-testid="column"] {
         flex: 1 !important;
-        min-width: 0 !important;
     }
 
-    /* 【ワイドボタン】2列の枠内で最大限に広げる */
+    /* 4. ワイドボタンのデザイン */
     div.stButton > button[kind="primary"] {
         width: 100% !important;
         height: 70px !important;
@@ -47,21 +44,26 @@ st.markdown("""
         border: 1px solid #d1d5db !important;
     }
 
-    /* ログイン後のリストデザイン */
+    /* 5. ログイン・リスト・特殊ボタンも中央揃えと幅を統一 */
+    div.stButton > button[kind="secondary"],
     a[data-testid="stLinkButton"] {
-        width: 280px !important; height: 65px !important;
-        border-radius: 12px !important; font-size: 1.1rem !important;
-        font-weight: bold !important; background-color: #ffffff !important;
-        color: #1a365d !important; border: 2px solid #e2e8f0 !important;
-        display: flex !important; align-items: center !important; justify-content: center !important;
-        text-decoration: none !important; margin-bottom: 10px !important;
-        margin-left: auto !important; margin-right: auto !important;
-    }
-    
-    /* ログイン・CLRボタンなどの特殊ボタン */
-    div.stButton > button[kind="secondary"] {
         width: 280px !important;
-        margin: 5px auto !important;
+        margin: 0 auto !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+    }
+
+    a[data-testid="stLinkButton"] {
+        height: 65px !important;
+        border-radius: 12px !important;
+        font-size: 1.1rem !important;
+        font-weight: bold !important;
+        background-color: #ffffff !important;
+        color: #1a365d !important;
+        border: 2px solid #e2e8f0 !important;
+        text-decoration: none !important;
+        margin-bottom: 10px !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -76,10 +78,10 @@ if 'temp_password' not in st.session_state:
 if not st.session_state['authenticated']:
     st.markdown('<h2 style="text-align:center;">🔒 営業支援システム</h2>', unsafe_allow_html=True)
     
-    # 中央に配置された280pxの入力欄
+    # 中央寄せされた入力欄
     password = st.text_input("アクセスパスワードを入力", value=st.session_state['temp_password'], type="password")
 
-    # 2列ずつのワイドボタン配置
+    # 2列ずつのワイドボタン
     rows = [["1", "2"], ["3", "4"], ["5", "6"], ["7", "8"], ["9", "0"], ["CLR", "⬅︎"]]
     
     for row in rows:
