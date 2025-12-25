@@ -3,13 +3,13 @@ import streamlit as st
 # 1. ページ設定
 st.set_page_config(page_title="不動産営業支援ポータル", layout="centered")
 
-# CSS: 上部余白を1.0remに調整し、その他のデザインは完全維持
+# CSS: 入力欄の2重枠を完全に解消し、1重にする
 st.markdown("""
     <style>
     header[data-testid="stHeader"] { visibility: hidden; }
     
-    /* 【修正】上部余白を 1.3rem に設定 */
-    .block-container { padding-top: 1.3rem !important; }
+    /* 上部余白を 1.0rem に設定 */
+    .block-container { padding-top: 1.0rem !important; }
     
     /* コンテンツ幅固定 */
     [data-testid="stVerticalBlock"] > div {
@@ -27,26 +27,39 @@ st.markdown("""
         margin-bottom: 10px !important;
     }
 
-    /* 入力欄のデザイン（現状維持） */
-    div[data-testid="stTextInput"] {
-        padding: 0px !important;
-        margin-bottom: 25px !important;
-    }
+    /* 【再修正】入力欄の2重枠を解消：外側のコンテナの枠をすべて消去 */
     div[data-testid="stTextInput"] > div {
-        padding: 0px !important;
+        border: none !important;
+        background-color: transparent !important;
+        box-shadow: none !important;
     }
+    div[data-testid="stTextInput"] div[data-baseweb="input"] {
+        border: none !important;
+        background-color: transparent !important;
+        box-shadow: none !important;
+    }
+
+    /* 内側の実際の入力フィールドだけに枠線を設定 */
     div[data-testid="stTextInput"] input {
         height: 75px !important;
         font-size: 36px !important;
         text-align: center !important;
         border-radius: 18px !important;
         background-color: #f1f5f9 !important;
+        /* ここで唯一の枠線を引く */
         border: 2px solid #cbd5e1 !important;
         color: #1a365d !important;
         box-shadow: inset 0 2px 4px rgba(0,0,0,0.05) !important;
+        outline: none !important;
     }
 
-    /* 数字ボタン：1〜5（現状維持） */
+    /* フォーカス時（クリック時）も枠が増えないように固定 */
+    div[data-testid="stTextInput"] input:focus {
+        border: 2px solid #cbd5e1 !important;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.05) !important;
+    }
+
+    /* 数字ボタン：1〜5（変更なし） */
     div.stButton > button {
         width: 100% !important;
         height: 75px !important; 
@@ -127,5 +140,3 @@ else:
     if st.button("ログアウト", key="logout_btn", type="secondary"):
         st.session_state['authenticated'] = False
         st.rerun()
-
-
