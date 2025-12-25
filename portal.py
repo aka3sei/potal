@@ -3,18 +3,29 @@ import streamlit as st
 # 1. ページ設定
 st.set_page_config(page_title="不動産営業支援ポータル", layout="centered")
 
-# CSS: ボタンデザインと中央揃えのみを適用（入力欄は極力いじらない）
+# CSS: 入力枠のサイズ調整とボタンデザインの維持
 st.markdown("""
     <style>
     header[data-testid="stHeader"] { visibility: hidden; }
     
-    /* 中央揃えの設定 */
+    /* コンテンツを280px幅で中央揃え */
     [data-testid="stVerticalBlock"] > div {
         width: 280px !important;
         margin-left: auto !important;
         margin-right: auto !important;
     }
 
+    /* 【入力枠の修正】 */
+    /* 枠全体の高さを出し、文字を中央に大きく表示 */
+    div[data-testid="stTextInput"] input {
+        height: 65px !important;
+        font-size: 30px !important; /* パスワードの「●」を大きく */
+        text-align: center !important;
+        border-radius: 12px !important;
+        border: 1px solid #d1d5db !important;
+    }
+
+    /* タイトルの余白 */
     .title-text {
         font-size: 22px;
         font-weight: bold;
@@ -23,7 +34,7 @@ st.markdown("""
         margin-bottom: 20px !important;
     }
 
-    /* 数字ボタンのデザイン（これまでの完璧な状態を維持） */
+    /* 数字ボタンのデザイン（維持） */
     div.stButton > button {
         width: 100% !important;
         height: 75px !important; 
@@ -46,7 +57,7 @@ st.markdown("""
         color: #ffffff !important;
     }
 
-    /* 修正ボタン */
+    /* 削除ボタン */
     div.stButton > button[kind="secondary"] {
         background-color: #f1f5f9 !important;
         height: 60px !important;
@@ -65,7 +76,7 @@ if 'temp_password' not in st.session_state:
 if not st.session_state['authenticated']:
     st.markdown('<div class="title-text">🔒 営業支援システム</div>', unsafe_allow_html=True)
     
-    # 4桁即時ログイン
+    # 即時ログイン判定（4桁入力で即遷移）
     if len(st.session_state['temp_password']) >= 4:
         if st.session_state['temp_password'] == "1234":
             st.session_state['authenticated'] = True
@@ -76,8 +87,8 @@ if not st.session_state['authenticated']:
             st.session_state['temp_password'] = ""
             st.rerun()
 
-    # 初期状態の入力欄（ラベルのみ非表示）
-    st.text_input("パスワード入力", value=st.session_state['temp_password'], type="password", label_visibility="collapsed")
+    # 入力表示枠
+    st.text_input("pass", value=st.session_state['temp_password'], type="password", label_visibility="collapsed")
 
     # 1〜5までのボタン
     for num in ["1", "2", "3", "4", "5"]:
