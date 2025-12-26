@@ -3,7 +3,7 @@ import streamlit as st
 # 1. ページ設定
 st.set_page_config(page_title="不動産営業支援ポータル", layout="centered")
 
-# CSS設定（入力枠のサイズと余白、ボタンデザイン）
+# CSS設定
 st.markdown("""
     <style>
     header[data-testid="stHeader"] { visibility: hidden; }
@@ -58,7 +58,6 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# セッション管理
 if 'authenticated' not in st.session_state:
     st.session_state['authenticated'] = False
 if 'temp_password' not in st.session_state:
@@ -68,7 +67,6 @@ if 'temp_password' not in st.session_state:
 if not st.session_state['authenticated']:
     st.markdown('<div class="title-text">🔒 営業支援システム</div>', unsafe_allow_html=True)
     
-    # 4桁入力で自動判定
     if len(st.session_state['temp_password']) >= 4:
         if st.session_state['temp_password'] == "1234":
             st.session_state['authenticated'] = True
@@ -95,9 +93,9 @@ else:
     st.markdown('<div class="title-text">📱 業務アプリ一覧</div>', unsafe_allow_html=True)
     st.write("")
     
-    # リンクボタン一覧（ここに内装アプリを入れています）
+    # 内装アプリを確実に表示させるためのクリーンな記述
     st.link_button("🏠 内装リフォームシミュレート", "https://reform-xblfcovcvgk83yhwkypqbu.streamlit.app/")
-    st.link_button("🏙️ 暮らしのスコア診断", "https://bbmns2pc89m86nxhkvqnet.streamlit.app/")
+    st.link_button("🏙️ 暮らしのスコア診断", "https://kqhrxuaoh5vmuguuuyfbzg.streamlit.app/")
     st.link_button("🚉 最寄り駅・周辺検索", "https://moyori-6e5qmrnhwfjieq9wfdtcee.streamlit.app/")
     st.link_button("🏢 マンション予想AI", "https://tokyo-mansion-ai-ds4tk2ddjdvxhdnbdcpghz.streamlit.app/")
     st.link_button("📈 営業進捗管理", "https://my-sales-app-aog993sltv8vseasajfwvr.streamlit.app/")
@@ -107,4 +105,3 @@ else:
     if st.button("ログアウト", key="logout_btn", type="secondary"):
         st.session_state['authenticated'] = False
         st.rerun()
-
