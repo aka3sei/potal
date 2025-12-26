@@ -3,7 +3,7 @@ import streamlit as st
 # 1. ページ設定
 st.set_page_config(page_title="不動産営業支援ポータル", layout="centered")
 
-# CSS: 装飾はせず、位置関係（横幅と下の余白）のみを調整
+# CSS: 装飾はせず、位置関係（横幅と下の余白）のみを維持
 st.markdown("""
     <style>
     header[data-testid="stHeader"] { visibility: hidden; }
@@ -22,7 +22,7 @@ st.markdown("""
     div[data-testid="stTextInput"] {
         width: 320px !important; 
         margin-left: -20px !important;
-        /* 【修正】入力欄と数字1の間の余白を広げる（1と2の隙間感に合わせる） */
+        /* 入力欄と数字1の間の余白 */
         margin-bottom: 25px !important; 
     }
 
@@ -35,7 +35,7 @@ st.markdown("""
         margin-bottom: 20px !important;
     }
 
-    /* 数字ボタンのデザイン（維持） */
+    /* 数字ボタンのデザイン */
     div.stButton > button {
         width: 100% !important;
         height: 75px !important; 
@@ -58,7 +58,7 @@ st.markdown("""
         color: #ffffff !important;
     }
 
-    /* 削除ボタン */
+    /* 修正・ログアウトボタン */
     div.stButton > button[kind="secondary"] {
         background-color: #f1f5f9 !important;
         height: 60px !important;
@@ -88,7 +88,7 @@ if not st.session_state['authenticated']:
             st.session_state['temp_password'] = ""
             st.rerun()
 
-    # 装飾なし、幅を広げ、下に余白を持たせた入力枠
+    # 入力表示エリア
     st.text_input("pass", value=st.session_state['temp_password'], type="password", label_visibility="collapsed")
 
     # 1〜5のボタン
@@ -106,6 +106,9 @@ if not st.session_state['authenticated']:
 else:
     st.markdown('<div class="title-text">📱 業務アプリ一覧</div>', unsafe_allow_html=True)
     st.write("")
+    
+    # アプリ一覧（内装アプリを追加）
+    st.link_button("🏠 内装リフォームシミュレート", "https://reform-xblfcovcvgk83yhwkypqbu.streamlit.app/")
     st.link_button("🏙️ 暮らしのスコア診断", "https://kqhrxuaoh5vmuguuuyfbzg.streamlit.app/")
     st.link_button("🚉 最寄り駅・周辺検索", "https://moyori-6e5qmrnhwfjieq9wfdtcee.streamlit.app/")
     st.link_button("🏢 マンション予想AI", "https://tokyo-mansion-ai-ds4tk2ddjdvxhdnbdcpghz.streamlit.app/")
