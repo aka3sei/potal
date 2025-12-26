@@ -3,7 +3,7 @@ import streamlit as st
 # 1. ページ設定
 st.set_page_config(page_title="不動産営業支援ポータル", layout="centered")
 
-# CSS設定: デザインの維持
+# CSS設定
 st.markdown("""
     <style>
     header[data-testid="stHeader"] { visibility: hidden; }
@@ -50,10 +50,11 @@ st.markdown("""
         color: #ffffff !important;
     }
 
+    /* 削除ボタンとログアウトボタンのスタイル */
     div.stButton > button[kind="secondary"] {
         background-color: #f1f5f9 !important;
         height: 60px !important;
-        font-size: 18px !important;
+        font-size: 24px !important; /* 記号を見やすくするため少し大きく */
     }
     </style>
 """, unsafe_allow_html=True)
@@ -84,7 +85,8 @@ if not st.session_state['authenticated']:
             st.session_state['temp_password'] += num
             st.rerun()
 
-    if st.button("⬅︎ 一文字削除", key="del_key", type="secondary"):
+    # 【修正】テキストから記号「⌫」に変更
+    if st.button("⌫", key="del_key", type="secondary"):
         st.session_state['temp_password'] = st.session_state['temp_password'][:-1]
         st.rerun()
 
@@ -93,7 +95,6 @@ else:
     st.markdown('<div class="title-text">📱 業務アプリ一覧</div>', unsafe_allow_html=True)
     st.write("")
     
-    # アプリ一覧（ご指定の最新URLに更新）
     st.link_button("🏠 内装リフォームシミュレート", "https://reform-xblfcovcvgk83yhwkypqbu.streamlit.app/")
     st.link_button("🏙️ 暮らしの立地スコア", "https://bbmns2pc89m86nxhkvqnet.streamlit.app/")
     st.link_button("🚉 最寄り駅・周辺検索", "https://moyori-6e5qmrnhwfjieq9wfdtcee.streamlit.app/")
@@ -102,6 +103,7 @@ else:
     st.link_button("💰 ローン診断", "https://kqhrxuaoh5vmuguuuyfbzg.streamlit.app/")
 
     st.write("---")
+    # ログアウトボタンはテキストのまま（読みやすさ優先）
     if st.button("ログアウト", key="logout_btn", type="secondary"):
         st.session_state['authenticated'] = False
         st.rerun()
