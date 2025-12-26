@@ -15,9 +15,11 @@ st.markdown("""
         margin-right: auto !important;
     }
 
+    /* 【修正】入力表示枠の横幅を半分(140px)にして中央寄せ */
     div[data-testid="stTextInput"] {
-        width: 320px !important; 
-        margin-left: -20px !important;
+        width: 140px !important; 
+        margin-left: auto !important;
+        margin-right: auto !important;
         margin-bottom: 25px !important; 
     }
 
@@ -50,11 +52,10 @@ st.markdown("""
         color: #ffffff !important;
     }
 
-    /* 削除ボタンとログアウトボタンのスタイル */
     div.stButton > button[kind="secondary"] {
         background-color: #f1f5f9 !important;
         height: 60px !important;
-        font-size: 24px !important; /* 記号を見やすくするため少し大きく */
+        font-size: 24px !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -85,7 +86,6 @@ if not st.session_state['authenticated']:
             st.session_state['temp_password'] += num
             st.rerun()
 
-    # 【修正】テキストから記号「⌫」に変更
     if st.button("⌫", key="del_key", type="secondary"):
         st.session_state['temp_password'] = st.session_state['temp_password'][:-1]
         st.rerun()
@@ -103,7 +103,6 @@ else:
     st.link_button("💰 ローン診断", "https://kqhrxuaoh5vmuguuuyfbzg.streamlit.app/")
 
     st.write("---")
-    # ログアウトボタンはテキストのまま（読みやすさ優先）
     if st.button("ログアウト", key="logout_btn", type="secondary"):
         st.session_state['authenticated'] = False
         st.rerun()
