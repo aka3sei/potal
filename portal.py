@@ -29,31 +29,28 @@ st.markdown("""
         margin-bottom: 20px !important;
     }
 
-    div.stButton > button {
+    /* リンクボタンのスタイル */
+    .stLinkButton a {
         width: 100% !important;
         height: 75px !important; 
         border-radius: 18px !important;
-        font-size: 34px !important; 
+        font-size: 24px !important; /* 文字サイズを微調整 */
         font-weight: bold !important;
         background-color: #ffffff !important;
         color: #1a365d !important;
         border: 1px solid #cbd5e1 !important;
-        display: block !important;
-        margin: 0 auto 10px auto !important; 
-        transition: transform 0.05s ease !important;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none !important;
+        margin-bottom: 10px !important; 
         box-shadow: 0 4px 6px -1px rgba(0,0,0,0.08) !important;
     }
 
-    div.stButton > button:active {
-        transform: scale(0.92) !important;
+    .stLinkButton a:active {
+        transform: scale(0.95) !important;
         background-color: #1a365d !important;
         color: #ffffff !important;
-    }
-
-    div.stButton > button[kind="secondary"] {
-        background-color: #f1f5f9 !important;
-        height: 60px !important;
-        font-size: 18px !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -79,25 +76,25 @@ if not st.session_state['authenticated']:
 
     st.text_input("pass", value=st.session_state['temp_password'], type="password", label_visibility="collapsed")
 
-    for num in ["1", "2", "3", "4", "5"]:
-        if st.button(num, key=f"num_{num}"):
-            st.session_state['temp_password'] += num
-            st.rerun()
+    # 数字ボタンの配置
+    cols = st.columns(3)
+    for i, num in enumerate(["1", "2", "3", "4", "5"]):
+        with cols[i % 3]:
+            if st.button(num, key=f"num_{num}"):
+                st.session_state['temp_password'] += num
+                st.rerun()
 
-    if st.button("⬅︎ 一文字削除", key="del_key", type="secondary"):
+    if st.button("⬅︎ 一文字削除", key="del_key"):
         st.session_state['temp_password'] = st.session_state['temp_password'][:-1]
         st.rerun()
 
 # --- 2. ログイン後：アプリ一覧 ---
 else:
     st.markdown('<div class="title-text">📱 業務アプリ一覧</div>', unsafe_allow_html=True)
-    st.write("")
     
-    # --- 新規追加セクション（今回作成したもの） ---
+    # リンクボタンを確実に表示させる
     st.link_button("🛡️ ハザードマップ", "https://hazardmap-ej92obhxl7cfrntxy7xtqj.streamlit.app/")
     st.link_button("⚖️ 賃貸 VS 購入", "https://taxfee-pfwmbwlcuvsftgfpxzpbgh.streamlit.app/")
-    
-    # --- 既存のアプリ一覧 ---
     st.link_button("🏠 内装リフォーム", "https://reform-xblfcovcvgk83yhwkypqbu.streamlit.app/")
     st.link_button("🏙️ 立地スコア", "https://bbmns2pc89m86nxhkvqnet.streamlit.app/")
     st.link_button("🚉 周辺検索", "https://moyori-6e5qmrnhwfjieq9wfdtcee.streamlit.app/")
@@ -106,6 +103,6 @@ else:
     st.link_button("💰 ローン診断", "https://kqhrxuaoh5vmuguuuyfbzg.streamlit.app/")
 
     st.write("---")
-    if st.button("ログアウト", key="logout_btn", type="secondary"):
+    if st.button("ログアウト", key="logout_btn"):
         st.session_state['authenticated'] = False
         st.rerun()
