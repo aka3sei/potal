@@ -3,7 +3,7 @@ import streamlit as st
 # 1. ページ設定
 st.set_page_config(page_title="不動産営業支援ポータル", layout="centered")
 
-# CSS設定
+# CSS設定: デザインの維持
 st.markdown("""
     <style>
     header[data-testid="stHeader"] { visibility: hidden; }
@@ -15,11 +15,9 @@ st.markdown("""
         margin-right: auto !important;
     }
 
-    /* 【修正】入力表示枠の横幅を半分(140px)にして中央寄せ */
     div[data-testid="stTextInput"] {
-        width: 140px !important; 
-        margin-left: auto !important;
-        margin-right: auto !important;
+        width: 320px !important; 
+        margin-left: -20px !important;
         margin-bottom: 25px !important; 
     }
 
@@ -55,7 +53,7 @@ st.markdown("""
     div.stButton > button[kind="secondary"] {
         background-color: #f1f5f9 !important;
         height: 60px !important;
-        font-size: 24px !important;
+        font-size: 18px !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -86,7 +84,7 @@ if not st.session_state['authenticated']:
             st.session_state['temp_password'] += num
             st.rerun()
 
-    if st.button("⌫", key="del_key", type="secondary"):
+    if st.button("⬅︎ 一文字削除", key="del_key", type="secondary"):
         st.session_state['temp_password'] = st.session_state['temp_password'][:-1]
         st.rerun()
 
@@ -95,9 +93,12 @@ else:
     st.markdown('<div class="title-text">📱 業務アプリ一覧</div>', unsafe_allow_html=True)
     st.write("")
     
-    st.link_button("🏠 内装リフォームシミュレート", "https://reform-xblfcovcvgk83yhwkypqbu.streamlit.app/")
-    st.link_button("🏙️ 暮らしの立地スコア", "https://bbmns2pc89m86nxhkvqnet.streamlit.app/")
-    st.link_button("🚉 最寄り駅・周辺検索", "https://moyori-6e5qmrnhwfjieq9wfdtcee.streamlit.app/")
+     # --- 一覧 ---
+    st.link_button("🛡️ ハザードマップ", "https://hazardmap-ej92obhxl7cfrntxy7xtqj.streamlit.app/")
+    st.link_button("⚖️ 賃貸 VS 購入", "https://taxfee-pfwmbwlcuvsftgfpxzpbgh.streamlit.app/")
+    st.link_button("🏠 内装リフォーム", "https://reform-xblfcovcvgk83yhwkypqbu.streamlit.app/")
+    st.link_button("🏙️ 立地スコア", "https://bbmns2pc89m86nxhkvqnet.streamlit.app/")
+    st.link_button("🚉 周辺検索", "https://moyori-6e5qmrnhwfjieq9wfdtcee.streamlit.app/")
     st.link_button("🏢 マンション予想AI", "https://tokyo-mansion-ai-ds4tk2ddjdvxhdnbdcpghz.streamlit.app/")
     st.link_button("📈 営業進捗管理", "https://my-sales-app-aog993sltv8vseasajfwvr.streamlit.app/")
     st.link_button("💰 ローン診断", "https://kqhrxuaoh5vmuguuuyfbzg.streamlit.app/")
