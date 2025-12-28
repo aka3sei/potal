@@ -119,18 +119,20 @@ else:
     st.markdown('<div class="title-text">📱 業務アプリ一覧</div>', unsafe_allow_html=True)
     
     # 最新のURLリンク集
-    st.link_button("🛡️ ハザードマップ", "https://hazardmap-ej92obhxl7cfrntxy7xtqj.streamlit.app/")
-    st.link_button("⚖️ 賃貸 VS 購入", "https://taxfee-pfwmbwlcuvsftgfpxzpbgh.streamlit.app/")
-    st.link_button("🏫 東京 教育環境完全ガイド", "https://qmkp7yf2na9mcxrggjayft.streamlit.app/")
-    st.link_button("🏠 内装リフォーム", "https://reform-xblfcovcvgk83yhwkypqbu.streamlit.app/")
+    st.link_button("🚉 最寄り駅・周辺検索", "https://moyori-6e5qmrnhwfjieq9wfdtcee.streamlit.app/")
     st.link_button("🏙️ 立地スコア", "https://bbmns2pc89m86nxhkvqnet.streamlit.app/")
-    st.link_button("🚉 周辺検索", "https://moyori-6e5qmrnhwfjieq9wfdtcee.streamlit.app/")
-    st.link_button("🏢 マンション予想AI", "https://tokyo-mansion-ai-ds4tk2ddjdvxhdnbdcpghz.streamlit.app/")
-    st.link_button("📈 営業進捗管理", "https://my-sales-app-aog993sltv8vseasajfwvr.streamlit.app/")
+    st.link_button("🛡️ ハザードマップ", "https://hazardmap-ej92obhxl7cfrntxy7xtqj.streamlit.app/")
+    st.link_button("🏫 東京 教育環境完全ガイド", "https://qmkp7yf2na9mcxrggjayft.streamlit.app/")
+    st.link_button("🏢 マンション予想AI", "https://tokyo-mansion-ai-ds4tk2ddjdvxhdnbdcpghz.streamlit.app/") 
+    st.link_button("⚖️ 賃貸 VS 購入", "https://taxfee-pfwmbwlcuvsftgfpxzpbgh.streamlit.app/")
     st.link_button("💰 ローン診断", "https://kqhrxuaoh5vmuguuuyfbzg.streamlit.app/")
+    st.link_button("🏠 内装リフォーム", "https://reform-xblfcovcvgk83yhwkypqbu.streamlit.app/")
+    st.link_button("📈 営業進捗管理", "https://my-sales-app-aog993sltv8vseasajfwvr.streamlit.app/")
+    
 
     st.write("---")
     if st.button("ログアウト", key="logout_btn"):
         st.session_state['authenticated'] = False
         st.rerun()
+
 
