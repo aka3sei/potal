@@ -128,11 +128,12 @@ else:
     st.link_button("💰 ローン診断", "https://kqhrxuaoh5vmuguuuyfbzg.streamlit.app/")
     st.link_button("🏠 内装リフォーム", "https://reform-xblfcovcvgk83yhwkypqbu.streamlit.app/")
     st.link_button("📈 営業進捗管理", "https://my-sales-app-aog993sltv8vseasajfwvr.streamlit.app/")
-    
+    st.link_button("🏢 マンション予想AI+5%インフレ", "https://8uthctn65qzqshktnuquhj.streamlit.app/") 
 
     st.write("---")
     if st.button("ログアウト", key="logout_btn"):
         st.session_state['authenticated'] = False
         st.rerun()
+
 
 
