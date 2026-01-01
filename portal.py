@@ -126,7 +126,7 @@ else:
     st.link_button("🏢 マンション予想AI", "https://tokyo-mansion-ai-ds4tk2ddjdvxhdnbdcpghz.streamlit.app/") 
     st.link_button("🏢 家賃相場 × 人口動態AI", "https://pauprok6wtw6vduiecewyj.streamlit.app/")
     st.link_button("⚖️ 賃貸 VS 購入", "https://taxfee-pfwmbwlcuvsftgfpxzpbgh.streamlit.app/")
-    st.link_button("🗺️ 不動産取引・詳細ロードマップ", "https://roadmap-gzhqjnenwyvjv5pqmuw5e6.streamlit.app/")
+    st.link_button("🗺️ 不動産取引ロードマップ", "https://roadmap-gzhqjnenwyvjv5pqmuw5e6.streamlit.app/")
     st.link_button("💰 ローン診断", "https://kqhrxuaoh5vmuguuuyfbzg.streamlit.app/")
     st.link_button("🏠 内装リフォーム", "https://reform-xblfcovcvgk83yhwkypqbu.streamlit.app/")
     st.link_button("📈 営業進捗管理", "https://my-sales-app-aog993sltv8vseasajfwvr.streamlit.app/")
@@ -136,6 +136,7 @@ else:
     if st.button("ログアウト", key="logout_btn"):
         st.session_state['authenticated'] = False
         st.rerun()
+
 
 
 
