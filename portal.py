@@ -119,8 +119,12 @@ else:
     st.markdown('<div class="title-text">📱 業務アプリ一覧</div>', unsafe_allow_html=True)
     
     # 最新のURLリンク集
-    st.link_button("🏢 マンション予想AI（購入）", "https://tokyo-mansion-ai-ds4tk2ddjdvxhdnbdcpghz.streamlit.app/") 
+    st.link_button("🏢 マンション予想AI（価格）", "https://tokyo-mansion-ai-ds4tk2ddjdvxhdnbdcpghz.streamlit.app/") 
+    st.link_button("🏢 マンション予想AI（エリア価格）", "https://tokyo-mansion-ai-v2-wbg6n9xtijgcv8yhxgfpes.streamlit.app/") 
+    st.link_button("🏢 マンション予想AI（賃料）", "https://lendv2-gfksm9fpsymxubnrdugkix.streamlit.app/")
     st.link_button("🏢 家賃相場 × 人口動態AI（賃貸）", "https://pauprok6wtw6vduiecewyj.streamlit.app/")
+    st.link_button("🏢 マンション予想AI（賃料）", "https://lendv2-gfksm9fpsymxubnrdugkix.streamlit.app/")
+    st.link_button("🏢 マンション予想AI（価格と賃料）", "https://sell-lend-3p2vtfvzngbwnwjahhuhr4.streamlit.app/")
     st.link_button("⚖️ 賃貸 VS 購入", "https://taxfee-pfwmbwlcuvsftgfpxzpbgh.streamlit.app/")
     st.link_button("⚖️ 不動産税金ガイド", "https://taxguide-a4ruqdqggbqjngzzyjbjvv.streamlit.app/")
     st.link_button("💰 ローン借換診断", "https://kqhrxuaoh5vmuguuuyfbzg.streamlit.app/")
@@ -139,6 +143,7 @@ else:
     if st.button("ログアウト", key="logout_btn"):
         st.session_state['authenticated'] = False
         st.rerun()
+
 
 
 
