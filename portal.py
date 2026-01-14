@@ -124,7 +124,6 @@ else:
     st.link_button("🏢 家賃相場 × 人口動態AI（賃貸）", "https://pauprok6wtw6vduiecewyj.streamlit.app/")
     st.link_button("🏢 マンション予想AI（エリア賃貸）", "https://lendv2-gfksm9fpsymxubnrdugkix.streamlit.app/")
     st.link_button("🏢 家賃相場 × 人口動態AI（賃貸）", "https://pauprok6wtw6vduiecewyj.streamlit.app/")
-    st.link_button("🏢 マンション予想AI（価格と賃貸）", "https://sell-lend-3p2vtfvzngbwnwjahhuhr4.streamlit.app/")
     st.link_button("⚖️ 賃貸 VS 購入", "https://taxfee-pfwmbwlcuvsftgfpxzpbgh.streamlit.app/")
     st.link_button("⚖️ 不動産税金ガイド", "https://taxguide-a4ruqdqggbqjngzzyjbjvv.streamlit.app/")
     st.link_button("💰 ローン借換診断", "https://kqhrxuaoh5vmuguuuyfbzg.streamlit.app/")
@@ -143,6 +142,7 @@ else:
     if st.button("ログアウト", key="logout_btn"):
         st.session_state['authenticated'] = False
         st.rerun()
+
 
 
 
